@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import GoogleMap from "./Components/GoogleMap";
+import RecommendationForm from "./RecommendationForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +24,9 @@ function App() {
         </p>
       </div>
       <GoogleMap />
+      <div>
+        <RecommendationForm />
+      </div>
     </>
   );
 }
