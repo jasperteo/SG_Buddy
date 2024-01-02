@@ -8,7 +8,7 @@ import {
 // import { Marker } from "@googlemaps/markerclusterer";
 import { useEffect, useState, useRef } from "react";
 
-export default function TestMap() {
+export default function GoogleMap() {
   const key = import.meta.env.VITE_GMAP_API_KEY;
 
   //Markers for places on map
@@ -27,6 +27,7 @@ export default function TestMap() {
         >
           <AdvancedMarker
             position={{ lat: 1.250111, lng: 103.830933 }}
+            title={"Sentosa"}
           ></AdvancedMarker>
         </Map>
       </APIProvider>
