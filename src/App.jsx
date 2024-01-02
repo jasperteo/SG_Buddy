@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import TestMap from "./TestMap";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +22,7 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
+      <TestMap />
     </>
   );
 }
