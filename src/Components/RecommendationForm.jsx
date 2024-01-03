@@ -5,6 +5,7 @@ import axios from "axios";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
 import GoogleMap from "./GoogleMap";
+import MapCards from "./MapCards";
 
 export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -139,6 +140,7 @@ export default function RecommendationForm() {
       {/* <pre>{suggestions && JSON.stringify(suggestionsRaw.data, null, 2)}</pre> */}
 
       {suggestionsRaw && <GoogleMap places={suggestionsRaw} />}
+      {suggestionsRaw && <MapCards places={suggestionsRaw} />}
     </>
   );
 }

@@ -26,7 +26,6 @@ function App() {
       </div>
       <div>
         <RecommendationForm />
-        <MapCards />
       </div>
     </>
   );
