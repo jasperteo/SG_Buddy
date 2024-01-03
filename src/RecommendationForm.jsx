@@ -3,7 +3,7 @@ import { Button, CircularProgress } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import useSWR from "swr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -36,7 +36,7 @@ export default function RecommendationForm() {
   };
 
   const {
-    data: suggestions,
+    data: suggestionsRaw,
     error: suggestionError,
     isLoading,
   } = useSWR(
@@ -45,6 +45,32 @@ export default function RecommendationForm() {
       : null,
     fetcher
   );
+
+  const suggestionParsed = (data) =>
+    data.data.map((suggestion, index) => {
+      return {
+        name: suggestion.name,
+        uuid: suggestion.uuid,
+        lat: suggestion.location.latitude,
+        lon: suggestion.location.longitude,
+        index: index,
+        address: `${
+          suggestion.address.block ? suggestion.address.block + " " : ""
+        }${suggestion.address.streetName}${
+          suggestion.address.buildingName
+            ? ", " + suggestion.address.buildingName
+            : ""
+        }${
+          suggestion.address.floorNumber
+            ? ", #" + suggestion.address.floorNumber + "-"
+            : ""
+        }${suggestion.address.unitNumber}${
+          suggestion.address.postalCode
+            ? ", Singapore " + suggestion.address.postalCode
+            : ""
+        }`,
+      };
+    });
 
   return (
     <>
@@ -105,7 +131,11 @@ export default function RecommendationForm() {
         </p>
       )}
       {suggestionError?.message}
-      <pre>{suggestions && JSON.stringify(suggestions.data, null, 2)}</pre>
+      <pre>
+        {suggestionsRaw &&
+          JSON.stringify(suggestionParsed(suggestionsRaw), null, 2)}
+      </pre>
+      {/* <pre>{suggestions && JSON.stringify(suggestionsRaw.data, null, 2)}</pre> */}
     </>
   );
 }
