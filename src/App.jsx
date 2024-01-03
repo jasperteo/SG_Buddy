@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import GoogleMap from "./Components/GoogleMap";
-import RecommendationForm from "./RecommendationForm";
+import RecommendationForm from "./Components/RecommendationForm";
+import MapCards from "./Components/MapCards";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,9 +24,9 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
-      <GoogleMap />
       <div>
         <RecommendationForm />
+        <MapCards />
       </div>
     </>
   );

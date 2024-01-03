@@ -4,6 +4,7 @@ import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
+import GoogleMap from "./GoogleMap";
 
 export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -136,6 +137,8 @@ export default function RecommendationForm() {
           JSON.stringify(suggestionParsed(suggestionsRaw), null, 2)}
       </pre>
       {/* <pre>{suggestions && JSON.stringify(suggestionsRaw.data, null, 2)}</pre> */}
+
+      {suggestionsRaw && <GoogleMap places={suggestionsRaw} />}
     </>
   );
 }
