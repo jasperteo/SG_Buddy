@@ -3,7 +3,7 @@ import { Button, CircularProgress } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import useSWR from "swr";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GoogleMap from "./GoogleMap";
 
 export default function RecommendationForm() {
@@ -47,31 +47,30 @@ export default function RecommendationForm() {
     fetcher
   );
 
-  const suggestionParsed = (data) =>
-    data.data.map((suggestion, index) => {
-      return {
-        name: suggestion.name,
-        uuid: suggestion.uuid,
-        lat: suggestion.location.latitude,
-        lon: suggestion.location.longitude,
-        index: index,
-        address: `${
-          suggestion.address.block ? suggestion.address.block + " " : ""
-        }${suggestion.address.streetName}${
-          suggestion.address.buildingName
-            ? ", " + suggestion.address.buildingName
-            : ""
-        }${
-          suggestion.address.floorNumber
-            ? ", #" + suggestion.address.floorNumber + "-"
-            : ""
-        }${suggestion.address.unitNumber}${
-          suggestion.address.postalCode
-            ? ", Singapore " + suggestion.address.postalCode
-            : ""
-        }`,
-      };
-    });
+  const suggestionParsed = suggestionsRaw?.data.map((suggestion, index) => {
+    return {
+      name: suggestion.name,
+      uuid: suggestion.uuid,
+      lat: suggestion.location.latitude,
+      lng: suggestion.location.longitude,
+      index: index,
+      address: `${
+        suggestion.address.block ? suggestion.address.block + " " : ""
+      }${suggestion.address.streetName}${
+        suggestion.address.buildingName
+          ? ", " + suggestion.address.buildingName
+          : ""
+      }${
+        suggestion.address.floorNumber
+          ? ", #" + suggestion.address.floorNumber + "-"
+          : ""
+      }${suggestion.address.unitNumber}${
+        suggestion.address.postalCode
+          ? ", Singapore " + suggestion.address.postalCode
+          : ""
+      }`,
+    };
+  });
 
   return (
     <>
@@ -132,13 +131,14 @@ export default function RecommendationForm() {
         </p>
       )}
       {suggestionError?.message}
-      <pre>
-        {suggestionsRaw &&
-          JSON.stringify(suggestionParsed(suggestionsRaw), null, 2)}
-      </pre>
-      {/* <pre>{suggestions && JSON.stringify(suggestionsRaw.data, null, 2)}</pre> */}
+      <ul>
+        {suggestionParsed &&
+          suggestionParsed.map((place) => (
+            <li key={place.uuid}>{place.name}</li>
+          ))}
+      </ul>
 
-      {suggestionsRaw && <GoogleMap places={suggestionsRaw} />}
+      {suggestionParsed && <GoogleMap places={suggestionParsed} />}
     </>
   );
 }
