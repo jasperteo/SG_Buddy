@@ -24,7 +24,7 @@ export default function GoogleMap({ places }) {
           <AdvancedMarker
             position={{ lat: 1.250111, lng: 103.830933 }}
             title={"Sentosa"}></AdvancedMarker>
-          {places.map((place, index) => (
+          {places.map((place) => (
             <AdvancedMarker
               key={place.uuid}
               position={{
