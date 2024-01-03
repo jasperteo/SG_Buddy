@@ -8,15 +8,12 @@ import {
 // import { Marker } from "@googlemaps/markerclusterer";
 import { useEffect, useState, useRef } from "react";
 
-export default function GoogleMap() {
+export default function GoogleMap({ places }) {
+  //key for googlr maps api
   const key = import.meta.env.VITE_GMAP_API_KEY;
+  console.log(places);
 
-  //Markers for places on map
-  // const marker = new AdvancedMarker({
-  //   position: lat: X, lng: X,
-
-  // })
-
+  //component renders google maps and markers for each recommendation
   return (
     <div style={{ height: "80vh", width: "100%" }}>
       <APIProvider apiKey={key}>
@@ -29,6 +26,16 @@ export default function GoogleMap() {
             position={{ lat: 1.250111, lng: 103.830933 }}
             title={"Sentosa"}
           ></AdvancedMarker>
+          {places.data.map((place, index) => (
+            <AdvancedMarker
+              key={index}
+              position={{
+                lat: Number(place.location.latitude),
+                lng: Number(place.location.longitude),
+              }}
+              title={place.name}
+            ></AdvancedMarker>
+          ))}
         </Map>
       </APIProvider>
     </div>
