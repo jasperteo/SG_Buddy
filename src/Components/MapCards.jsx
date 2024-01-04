@@ -78,6 +78,7 @@ export default function MapCards({ places }) {
     return () => off(favouriteListRef);
   }, []);
 
+  //renders list of all saved places regardless of category
   const favPlacesListItems = (places) => {
     console.log("reached favplaces func");
     if (places.length > 0) {
