@@ -20,6 +20,7 @@ export default function RecommendationForm() {
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
   const [radius, setRadius] = useState(1000);
+
   const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
   const fetcher = async (apiURL) => {
@@ -44,12 +45,7 @@ export default function RecommendationForm() {
     fetcher
   );
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, control } = useForm();
 
   const onSubmit = (data) => {
     setLocation(`${data.firstItem}%2C${data.secondItem}`);
@@ -85,9 +81,7 @@ export default function RecommendationForm() {
 
   return (
     <>
-      {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* register your input into the hook by invoking the "register" function */}
         <div>
           <Controller
             name="firstItem"
@@ -96,7 +90,7 @@ export default function RecommendationForm() {
             render={({ field }) => (
               <TextField
                 {...field}
-                id="filled-basic"
+                id="firstItem"
                 label="First Item"
                 variant="filled"
                 helperText="Required"
@@ -104,7 +98,6 @@ export default function RecommendationForm() {
             )}
           />
         </div>
-        {errors?.firstItem?.message}
         <br />
         <div>
           <Controller
@@ -114,7 +107,7 @@ export default function RecommendationForm() {
             render={({ field }) => (
               <TextField
                 {...field}
-                id="filled-basic"
+                id="secondItem"
                 label="Second Item"
                 variant="filled"
                 helperText="Required"
@@ -122,7 +115,6 @@ export default function RecommendationForm() {
             )}
           />
         </div>
-        {errors?.secondItem?.message}
         <br />
         <div>
           <Controller
@@ -181,7 +173,6 @@ export default function RecommendationForm() {
             <li key={place.uuid}>{place.name}</li>
           ))}
       </ul>
-
       {suggestionParsed && <GoogleMap places={suggestionParsed} />}
     </>
   );
