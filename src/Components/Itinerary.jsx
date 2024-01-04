@@ -4,40 +4,25 @@ import {
   onChildChanged,
   onChildRemoved,
   ref as databaseRef,
-  push,
   set,
   remove,
-  update,
   off,
 } from "firebase/database";
-import {
-  Button,
-  CircularProgress,
-  TextField,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
-  FormHelperText,
-} from "@mui/material/";
+import { Button, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 
-const DB_ITINERARY_KEY = "itinerary";
-const DB_FLIGHT_KEY = "flight";
-const DB_ACCOMMODATION_KEY = "accommodation";
-const itineraryRef = databaseRef(database, DB_ITINERARY_KEY);
-const flightRef = databaseRef(database, DB_ITINERARY_KEY + "/" + DB_FLIGHT_KEY);
-const accommodationRef = databaseRef(
-  database,
-  DB_ITINERARY_KEY + "/" + DB_ACCOMMODATION_KEY
-);
+const DB_FLIGHT_KEY = "itinerary/flight";
+const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
+const flightRef = databaseRef(database, DB_FLIGHT_KEY);
+const accommodationRef = databaseRef(database, DB_ACCOMMODATION_KEY);
 
 export default function Itinerary() {
   const [flight, setFlight] = useState({});
   const [accommodation, setAccommodation] = useState({});
-  const { register, handleSubmit, control } = useForm();
+
+  const { handleSubmit, control } = useForm();
 
   const writeFlightData = (data) => {
     set(flightRef, {
@@ -46,7 +31,6 @@ export default function Itinerary() {
       flight: data.flight,
     });
   };
-
   const writeAccommodationData = (data) => {
     set(accommodationRef, {
       accommodation: data.accommodation,
