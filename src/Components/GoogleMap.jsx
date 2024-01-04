@@ -22,12 +22,16 @@ export default function GoogleMap({ places }) {
           zoom={12}
           mapId={key}
         >
-          {places.data.map((place, index) => (
+          <AdvancedMarker
+            position={{ lat: 1.250111, lng: 103.830933 }}
+            title={"Sentosa"}
+          ></AdvancedMarker>
+          {places.map((place) => (
             <AdvancedMarker
-              key={index}
+              key={place.uuid}
               position={{
-                lat: Number(place.location.latitude),
-                lng: Number(place.location.longitude),
+                lat: place.lat,
+                lng: place.lng,
               }}
               title={place.name}
             ></AdvancedMarker>

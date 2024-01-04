@@ -1,9 +1,18 @@
-import { useForm } from "react-hook-form";
-import { Button, CircularProgress } from "@mui/material/";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Button,
+  CircularProgress,
+  TextField,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  FormHelperText,
+} from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 import useSWR from "swr";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GoogleMap from "./GoogleMap";
 import MapCards from "./MapCards";
 
@@ -11,20 +20,8 @@ export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+  const [radius, setRadius] = useState(1000);
   const API_KEY = import.meta.env.VITE_TIH_API_KEY;
-
-  const onSubmit = (data) => {
-    setLocation(`${data.firstItem}%2C${data.secondItem}`);
-    setDataset(data.thirdItem);
-    setFormSubmitted(true);
-    return console.log(data, location, dataset);
-  };
 
   const fetcher = async (apiURL) => {
     const response = await axios.get(apiURL, {
@@ -43,83 +40,130 @@ export default function RecommendationForm() {
     isLoading,
   } = useSWR(
     formSubmitted
-      ? `https://api.stb.gov.sg/services/navigation/v2/search?location=${location}&dataset=${dataset}`
+      ? `https://api.stb.gov.sg/services/navigation/v2/search?location=${location}&dataset=${dataset}&radius=${radius}`
       : null,
     fetcher
   );
 
-  const suggestionParsed = (data) =>
-    data.data.map((suggestion, index) => {
-      return {
-        name: suggestion.name,
-        uuid: suggestion.uuid,
-        lat: suggestion.location.latitude,
-        lon: suggestion.location.longitude,
-        index: index,
-        address: `${
-          suggestion.address.block ? suggestion.address.block + " " : ""
-        }${suggestion.address.streetName}${
-          suggestion.address.buildingName
-            ? ", " + suggestion.address.buildingName
-            : ""
-        }${
-          suggestion.address.floorNumber
-            ? ", #" + suggestion.address.floorNumber + "-"
-            : ""
-        }${suggestion.address.unitNumber}${
-          suggestion.address.postalCode
-            ? ", Singapore " + suggestion.address.postalCode
-            : ""
-        }`,
-      };
-    });
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    setLocation(`${data.firstItem}%2C${data.secondItem}`);
+    setDataset(data.category);
+    setRadius(data.radius);
+    setFormSubmitted(true);
+  };
+
+  const suggestionParsed = suggestionsRaw?.data.map((suggestion, index) => {
+    return {
+      name: suggestion.name,
+      uuid: suggestion.uuid,
+      lat: suggestion.location.latitude,
+      lng: suggestion.location.longitude,
+      index: index,
+      address: `${
+        suggestion.address.block ? suggestion.address.block + " " : ""
+      }${suggestion.address.streetName}${
+        suggestion.address.buildingName
+          ? ", " + suggestion.address.buildingName
+          : ""
+      }${
+        suggestion.address.floorNumber
+          ? ", #" + suggestion.address.floorNumber + "-"
+          : ""
+      }${suggestion.address.unitNumber}${
+        suggestion.address.postalCode
+          ? ", Singapore " + suggestion.address.postalCode
+          : ""
+      }`,
+    };
+  });
 
   return (
     <>
       {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* register your input into the hook by invoking the "register" function */}
-        <p>
-          <label>
-            First Item:{" "}
-            <input
-              type="text"
-              defaultValue="1.255694"
-              {...register("firstItem", { required: "This field is required" })}
-            />
-          </label>
-        </p>
+        <div>
+          <Controller
+            name="firstItem"
+            control={control}
+            defaultValue="1.255694"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="filled-basic"
+                label="First Item"
+                variant="filled"
+                helperText="Required"
+              />
+            )}
+          />
+        </div>
         {errors?.firstItem?.message}
-        <p>
-          <label>
-            Second Item:{" "}
-            <input
-              type="text"
-              defaultValue="103.81985"
-              {...register("secondItem", {
-                required: "This field is required",
-              })}
-            />
-          </label>
-        </p>
+        <br />
+        <div>
+          <Controller
+            name="secondItem"
+            control={control}
+            defaultValue="103.81985"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="filled-basic"
+                label="Second Item"
+                variant="filled"
+                helperText="Required"
+              />
+            )}
+          />
+        </div>
         {errors?.secondItem?.message}
-        <p>
-          <label>
-            Third Item:{" "}
-            <select {...register("thirdItem", { required: true })}>
-              <option value="accommodation">Accommodation</option>
-              <option value="attractions">Attractions</option>
-              <option value="bars_clubs">Bars & Clubs</option>
-              <option value="cruises">Cruises</option>
-              <option value="events">Events</option>
-              <option value="food_beverages">Food & Beverages</option>
-              <option value="precincts">Precincts</option>
-              <option value="shops">Shops</option>
-              <option value="tours">Tours</option>
-              <option value="venues">Venues</option>
-            </select>
-          </label>
-        </p>
+        <br />
+        <div>
+          <Controller
+            name="radius"
+            control={control}
+            defaultValue="1000"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="filled-basic"
+                label="Radius (in metres)"
+                variant="filled"
+                helperText="Required"
+              />
+            )}
+          />
+        </div>
+        <br />
+        <div>
+          <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
+            <InputLabel>Category</InputLabel>
+            <Select
+              {...register("category", { required: true })}
+              id="category"
+              defaultValue=""
+            >
+              <MenuItem value="accommodation">Accommodation</MenuItem>
+              <MenuItem value="attractions">Attractions</MenuItem>
+              <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
+              <MenuItem value="cruises">Cruises</MenuItem>
+              <MenuItem value="events">Events</MenuItem>
+              <MenuItem value="food_beverages">Food & Beverages</MenuItem>
+              <MenuItem value="precincts">Precincts</MenuItem>
+              <MenuItem value="shops">Shops</MenuItem>
+              <MenuItem value="tours">Tours</MenuItem>
+              <MenuItem value="venues">Venues</MenuItem>
+            </Select>
+            <FormHelperText>Required</FormHelperText>
+          </FormControl>
+        </div>
         <p>
           <Button type="submit" variant="contained" endIcon={<SendIcon />}>
             Send
@@ -133,11 +177,6 @@ export default function RecommendationForm() {
         </p>
       )}
       {suggestionError?.message}
-      <pre>
-        {suggestionsRaw &&
-          JSON.stringify(suggestionParsed(suggestionsRaw), null, 2)}
-      </pre>
-      {/* <pre>{suggestions && JSON.stringify(suggestionsRaw.data, null, 2)}</pre> */}
 
       {suggestionsRaw && <GoogleMap places={suggestionsRaw} />}
       {suggestionsRaw && <MapCards places={suggestionsRaw} />}
