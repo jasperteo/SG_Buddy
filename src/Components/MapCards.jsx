@@ -102,43 +102,21 @@ export default function MapCards({ places }) {
 
   //vary button function and color based on if place is included as favourite
   const varyButton = (place, index) => {
-    for (let i = 0; i < favPlaces.length; i++) {
-      if (place.uuid === favPlaces[i].val.uuid) {
-        return (
-          <IconButton
-            aria-label="add to favorites"
-            color="primary"
-            onClick={() => deleteSavedFav(favPlaces[i].key)}>
-            <FavoriteIcon />
-          </IconButton>
-        );
-      }
-    }
-    //if places not saved as favourite
+    const favoritePlace = favPlaces.find(
+      (favPlace) => place.uuid === favPlace.val.uuid
+    );
     return (
       <IconButton
         aria-label="add to favorites"
-        onClick={() => saveToFavs(index)}>
+        color={favoritePlace ? "primary" : "default"}
+        onClick={() =>
+          favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
+        }
+      >
         <FavoriteIcon />
       </IconButton>
     );
   };
-
-  // const varyButton = (place, index) => {
-  //   const favoritePlace = favPlaces.find(
-  //     (favPlace) => place.uuid === favPlace.val.uuid
-  //   );
-  //   return (
-  //     <IconButton
-  //       aria-label="add to favorites"
-  //       color={favoritePlace ? "primary" : "default"}
-  //       onClick={() =>
-  //         favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-  //       }>
-  //       <FavoriteIcon />
-  //     </IconButton>
-  //   );
-  // };
 
   return (
     <div>
