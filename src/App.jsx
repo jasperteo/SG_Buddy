@@ -4,6 +4,7 @@ import GoogleMap from "./Components/GoogleMap";
 import RecommendationForm from "./Components/RecommendationForm";
 import MapCards from "./Components/MapCards";
 import Itinerary from "./Components/Itinerary";
+import LoginForm from "./Components/LogInForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,6 +25,9 @@ function App() {
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+      </div>
+      <div>
+        <LoginForm />
       </div>
       <div>
         <RecommendationForm />
