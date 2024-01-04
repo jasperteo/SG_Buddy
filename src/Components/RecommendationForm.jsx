@@ -177,9 +177,15 @@ export default function RecommendationForm() {
         </p>
       )}
       {suggestionError?.message}
+      <ul>
+        {suggestionParsed &&
+          suggestionParsed.map((place) => (
+            <li key={place.uuid}>{place.name}</li>
+          ))}
+      </ul>
 
-      {suggestionsRaw && <GoogleMap places={suggestionsRaw} />}
-      {suggestionsRaw && <MapCards places={suggestionsRaw} />}
+      {suggestionParsed && <GoogleMap places={suggestionParsed} />}
+      {suggestionParsed && <MapCards places={suggestionParsed} />}
     </>
   );
 }
