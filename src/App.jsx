@@ -1,13 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import GoogleMap from "./Components/GoogleMap";
 import RecommendationForm from "./Components/RecommendationForm";
 import MapCards from "./Components/MapCards";
 import Itinerary from "./Components/Itinerary";
 import LoginForm from "./Components/LogInForm";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./Components/FirebaseConfig";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  //check login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  //user info
+  const [email, setEmail] = useState("");
+  const [uid, setUid] = useState("");
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setEmail(auth.currentUser.email);
+        setUid(auth.currentUser.uid);
+      } else {
+        setIsLoggedIn(false);
+        setEmail("");
+        setUid("");
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -18,23 +38,13 @@ function App() {
         alt="passport"
       />
       <h1>RA Project 2</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
       <div>
-        <LoginForm />
+        <LoginForm isLoggedIn={isLoggedIn} email={email} uid={uid} />
       </div>
       <div>
         <RecommendationForm />
-        <Itinerary />
+        <Itinerary uid={uid} />
       </div>
     </>
   );
 }
-
-export default App;

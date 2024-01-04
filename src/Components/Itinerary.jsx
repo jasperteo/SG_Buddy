@@ -1,4 +1,7 @@
-import { auth, database, storage } from "./FirebaseConfig";
+import { Button, TextField } from "@mui/material/";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   onChildAdded,
   onChildChanged,
@@ -14,21 +17,22 @@ import {
   ref as storageRef,
   deleteObject,
 } from "firebase/storage";
-import { Button, TextField } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { database, storage } from "./FirebaseConfig";
 
 const DB_FLIGHT_KEY = "itinerary/flight";
 const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
-const flightRef = databaseRef(database, DB_FLIGHT_KEY);
-const accommodationRef = databaseRef(database, DB_ACCOMMODATION_KEY);
 
-export default function Itinerary() {
+export default function Itinerary({ uid }) {
   const [flight, setFlight] = useState({});
   const [accommodation, setAccommodation] = useState({});
+
+  const flightRef = databaseRef(database, uid + "/" + DB_FLIGHT_KEY);
+  const accommodationRef = databaseRef(
+    database,
+    uid + "/" + DB_ACCOMMODATION_KEY
+  );
 
   const { handleSubmit, control } = useForm();
 
@@ -99,25 +103,19 @@ export default function Itinerary() {
     onChildAdded(accommodationRef, (data) =>
       setAccommodation((prev) => ({ ...prev, [data.key]: data.val() }))
     );
-
-    onChildRemoved(flightRef, () => setFlight({}));
-    onChildRemoved(accommodationRef, () => setAccommodation({}));
-
     onChildChanged(flightRef, (data) =>
       setFlight((prev) => ({ ...prev, [data.key]: data.val() }))
     );
     onChildChanged(accommodationRef, (data) =>
       setAccommodation((prev) => ({ ...prev, [data.key]: data.val() }))
     );
+    onChildRemoved(flightRef, () => setFlight({}));
+    onChildRemoved(accommodationRef, () => setAccommodation({}));
     return () => {
       off(flightRef);
       off(accommodationRef);
     };
   }, []);
-
-  useEffect(() => {
-    console.log(flight, accommodation);
-  }, [flight, accommodation]);
 
   return (
     <>
