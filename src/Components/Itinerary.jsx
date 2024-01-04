@@ -8,8 +8,16 @@ import {
   remove,
   off,
 } from "firebase/database";
+import {
+  getDownloadURL,
+  uploadBytes,
+  ref as storageRef,
+  deleteObject,
+} from "firebase/storage";
 import { Button, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 
@@ -24,18 +32,64 @@ export default function Itinerary() {
 
   const { handleSubmit, control } = useForm();
 
-  const writeFlightData = (data) => {
+  const writeFlightData = async (data) => {
+    let name = "";
+    let url = "";
+    if (data.flightFile) {
+      const newStorageRef = storageRef(
+        storage,
+        DB_FLIGHT_KEY + "/" + data.flightFile.name
+      );
+      await uploadBytes(newStorageRef, data.flightFile);
+      url = await getDownloadURL(newStorageRef);
+      name = data.flightFile.name;
+    }
     set(flightRef, {
       departingAirport: data.departingAirport,
       arrivingAirport: data.arrivingAirport,
       flight: data.flight,
+      flightFileURL: url,
+      flightFileName: name,
     });
   };
-  const writeAccommodationData = (data) => {
+  const writeAccommodationData = async (data) => {
+    let name = "";
+    let url = "";
+    if (data.accommodationFile) {
+      const newStorageRef = storageRef(
+        storage,
+        DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
+      );
+      await uploadBytes(newStorageRef, data.accommodationFile);
+      url = await getDownloadURL(newStorageRef);
+      name = data.accommodationFile.name;
+    }
     set(accommodationRef, {
       accommodation: data.accommodation,
       address: data.address,
+      accommodationFileURL: url,
+      accommodationFileName: name,
     });
+  };
+
+  const deleteFlightData = async () => {
+    if (flight.flightFileName) {
+      await deleteObject(
+        storageRef(storage, DB_FLIGHT_KEY + "/" + flight.flightFileName)
+      );
+    }
+    remove(flightRef);
+  };
+  const deleteAccommodationData = async () => {
+    if (accommodation.accommodationFileName) {
+      await deleteObject(
+        storageRef(
+          storage,
+          DB_ACCOMMODATION_KEY + "/" + accommodation.accommodationFileName
+        )
+      );
+    }
+    remove(accommodationRef);
   };
 
   useEffect(() => {
@@ -116,7 +170,31 @@ export default function Itinerary() {
         <p>
           <Button type="submit" variant="contained" endIcon={<SendIcon />}>
             Send
-          </Button>
+          </Button>{" "}
+          <Button
+            onClick={deleteFlightData}
+            variant="contained"
+            endIcon={<DeleteIcon />}>
+            Delete
+          </Button>{" "}
+          <Controller
+            name="flightFile"
+            control={control}
+            defaultValue={null}
+            render={({ field }) => (
+              <Button
+                component="label"
+                variant="contained"
+                endIcon={<CloudUploadIcon />}>
+                Upload file
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files[0])}
+                />
+              </Button>
+            )}
+          />
         </p>
       </form>
       <form onSubmit={handleSubmit(writeAccommodationData)}>
@@ -153,17 +231,50 @@ export default function Itinerary() {
         <p>
           <Button type="submit" variant="contained" endIcon={<SendIcon />}>
             Send
-          </Button>
+          </Button>{" "}
+          <Button
+            onClick={deleteAccommodationData}
+            variant="contained"
+            endIcon={<DeleteIcon />}>
+            Delete
+          </Button>{" "}
+          <Controller
+            name="accommodationFile"
+            control={control}
+            defaultValue={null}
+            render={({ field }) => (
+              <Button
+                component="label"
+                variant="contained"
+                endIcon={<CloudUploadIcon />}>
+                Upload file
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files[0])}
+                />
+              </Button>
+            )}
+          />
         </p>
       </form>
       <div>
         <p>Departing: {flight.departingAirport}</p>
         <p>Arriving: {flight.arrivingAirport}</p>
         <p>Flight: {flight.flight}</p>
+        <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
+          <iconify-icon icon="mdi:attachment"></iconify-icon>
+        </a>
       </div>
       <div>
         <p>Accommodation: {accommodation.accommodation}</p>
         <p>Address: {accommodation.address}</p>
+        <a
+          target="_blank"
+          href={accommodation.accommodationFileURL}
+          rel="noreferrer">
+          <iconify-icon icon="mdi:attachment"></iconify-icon>
+        </a>
       </div>
     </>
   );
