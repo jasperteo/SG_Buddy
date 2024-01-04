@@ -22,10 +22,12 @@ import {
 } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
 
 const DB_ITINERARY_KEY = "itinerary";
 const DB_FLIGHT_KEY = "flight";
 const DB_ACCOMMODATION_KEY = "accommodation";
+const itineraryRef = databaseRef(database, DB_ITINERARY_KEY);
 const flightRef = databaseRef(database, DB_ITINERARY_KEY + "/" + DB_FLIGHT_KEY);
 const accommodationRef = databaseRef(
   database,
@@ -33,6 +35,8 @@ const accommodationRef = databaseRef(
 );
 
 export default function Itinerary() {
+  const [flight, setFlight] = useState("");
+  const [accommodation, setAccommodation] = useState("");
   const { register, handleSubmit, control } = useForm();
 
   const writeFlightData = (data) => {
@@ -49,6 +53,23 @@ export default function Itinerary() {
       address: data.address,
     });
   };
+
+  useEffect(() => {
+    onChildAdded(itineraryRef, (data) =>
+      setFlight((prev) => [...prev, { key: data.key, val: data.val() }])
+    );
+    // onChildRemoved(messagesRef, (data) =>
+    //   setMessages((prev) => prev.filter((item) => item.key !== data.key))
+    // );
+    // onChildChanged(messagesRef, (data) =>
+    //   setMessages((prev) =>
+    //     prev.map((item) =>
+    //       item.key === data.key ? { key: data.key, val: data.val() } : item
+    //     )
+    //   )
+    // );
+    return () => off(itineraryRef);
+  }, []);
 
   return (
     <>
@@ -141,6 +162,7 @@ export default function Itinerary() {
           </Button>
         </p>
       </form>
+      <p></p>
     </>
   );
 }
