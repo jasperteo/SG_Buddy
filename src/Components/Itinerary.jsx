@@ -42,7 +42,7 @@ export default function Itinerary({ uid }) {
     if (data.flightFile) {
       const newStorageRef = storageRef(
         storage,
-        DB_FLIGHT_KEY + "/" + data.flightFile.name
+        uid + "/" + DB_FLIGHT_KEY + "/" + data.flightFile.name
       );
       await uploadBytes(newStorageRef, data.flightFile);
       url = await getDownloadURL(newStorageRef);
@@ -62,7 +62,7 @@ export default function Itinerary({ uid }) {
     if (data.accommodationFile) {
       const newStorageRef = storageRef(
         storage,
-        DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
+        uid + "/" + DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
       );
       await uploadBytes(newStorageRef, data.accommodationFile);
       url = await getDownloadURL(newStorageRef);
@@ -79,7 +79,10 @@ export default function Itinerary({ uid }) {
   const deleteFlightData = async () => {
     if (flight.flightFileName) {
       await deleteObject(
-        storageRef(storage, DB_FLIGHT_KEY + "/" + flight.flightFileName)
+        storageRef(
+          storage,
+          uid + "/" + DB_FLIGHT_KEY + "/" + flight.flightFileName
+        )
       );
     }
     remove(flightRef);
@@ -89,7 +92,11 @@ export default function Itinerary({ uid }) {
       await deleteObject(
         storageRef(
           storage,
-          DB_ACCOMMODATION_KEY + "/" + accommodation.accommodationFileName
+          uid +
+            "/" +
+            DB_ACCOMMODATION_KEY +
+            "/" +
+            accommodation.accommodationFileName
         )
       );
     }
