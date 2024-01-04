@@ -17,7 +17,7 @@ import {
   update,
 } from "firebase/database";
 import { deleteObject, ref as storageRef } from "firebase/storage";
-import { database, storage } from "../FirebaseConfig";
+import { database, storage } from "../Components/FirebaseConfig";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
@@ -40,6 +40,7 @@ export default function MapCards({ places }) {
       address: place.address,
       lat: place.lat,
       lng: place.lng,
+      uuid: place.uuid,
     });
   };
 
