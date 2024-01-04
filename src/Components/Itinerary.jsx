@@ -52,10 +52,23 @@ export default function Itinerary() {
       flightFileName: name,
     });
   };
-  const writeAccommodationData = (data) => {
+  const writeAccommodationData = async (data) => {
+    let name = "";
+    let url = "";
+    if (data.accommodationFile) {
+      const newStorageRef = storageRef(
+        storage,
+        DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
+      );
+      await uploadBytes(newStorageRef, data.accommodationFile);
+      url = await getDownloadURL(newStorageRef);
+      name = data.accommodationFile.name;
+    }
     set(accommodationRef, {
       accommodation: data.accommodation,
       address: data.address,
+      accommodationFileURL: url,
+      accommodationFileName: name,
     });
   };
 
@@ -68,7 +81,15 @@ export default function Itinerary() {
     remove(flightRef);
   };
   const deleteAccommodationData = async () => {
-    remove(flightRef);
+    if (accommodation.accommodationFileName) {
+      await deleteObject(
+        storageRef(
+          storage,
+          DB_ACCOMMODATION_KEY + "/" + accommodation.accommodationFileName
+        )
+      );
+    }
+    remove(accommodationRef);
   };
 
   useEffect(() => {
@@ -216,18 +237,44 @@ export default function Itinerary() {
             variant="contained"
             endIcon={<DeleteIcon />}>
             Delete
-          </Button>
+          </Button>{" "}
+          <Controller
+            name="accommodationFile"
+            control={control}
+            defaultValue={null}
+            render={({ field }) => (
+              <Button
+                component="label"
+                variant="contained"
+                endIcon={<CloudUploadIcon />}>
+                Upload file
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files[0])}
+                />
+              </Button>
+            )}
+          />
         </p>
       </form>
       <div>
         <p>Departing: {flight.departingAirport}</p>
         <p>Arriving: {flight.arrivingAirport}</p>
         <p>Flight: {flight.flight}</p>
-        <img src={flight.flightFileURL} alt="" />
+        <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
+          <iconify-icon icon="mdi:attachment"></iconify-icon>
+        </a>
       </div>
       <div>
         <p>Accommodation: {accommodation.accommodation}</p>
         <p>Address: {accommodation.address}</p>
+        <a
+          target="_blank"
+          href={accommodation.accommodationFileURL}
+          rel="noreferrer">
+          <iconify-icon icon="mdi:attachment"></iconify-icon>
+        </a>
       </div>
     </>
   );
