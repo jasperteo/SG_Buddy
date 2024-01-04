@@ -3,6 +3,7 @@ import "./App.css";
 import GoogleMap from "./Components/GoogleMap";
 import RecommendationForm from "./Components/RecommendationForm";
 import MapCards from "./Components/MapCards";
+import Itinerary from "./Components/Itinerary";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -26,6 +27,8 @@ function App() {
       </div>
       <div>
         <RecommendationForm />
+        <MapCards />
+        <Itinerary />
       </div>
     </>
   );
