@@ -98,8 +98,7 @@ export default function MapCards({ places }) {
           <IconButton
             aria-label="add to favorites"
             color="primary"
-            onClick={() => deleteSavedFav(favPlaces[i].key)}
-          >
+            onClick={() => deleteSavedFav(favPlaces[i].key)}>
             <FavoriteIcon />
           </IconButton>
         );
@@ -109,12 +108,27 @@ export default function MapCards({ places }) {
     return (
       <IconButton
         aria-label="add to favorites"
-        onClick={() => saveToFavs(index)}
-      >
+        onClick={() => saveToFavs(index)}>
         <FavoriteIcon />
       </IconButton>
     );
   };
+
+  // const varyButton = (place, index) => {
+  //   const favoritePlace = favPlaces.find(
+  //     (favPlace) => place.uuid === favPlace.val.uuid
+  //   );
+  //   return (
+  //     <IconButton
+  //       aria-label="add to favorites"
+  //       color={favoritePlace ? "primary" : "default"}
+  //       onClick={() =>
+  //         favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
+  //       }>
+  //       <FavoriteIcon />
+  //     </IconButton>
+  //   );
+  // };
 
   return (
     <div>
