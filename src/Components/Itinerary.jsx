@@ -35,8 +35,8 @@ const accommodationRef = databaseRef(
 );
 
 export default function Itinerary() {
-  const [flight, setFlight] = useState("");
-  const [accommodation, setAccommodation] = useState("");
+  const [flight, setFlight] = useState({});
+  const [accommodation, setAccommodation] = useState({});
   const { register, handleSubmit, control } = useForm();
 
   const writeFlightData = (data) => {
@@ -55,21 +55,31 @@ export default function Itinerary() {
   };
 
   useEffect(() => {
-    onChildAdded(itineraryRef, (data) =>
-      setFlight((prev) => [...prev, { key: data.key, val: data.val() }])
+    onChildAdded(flightRef, (data) =>
+      setFlight((prev) => ({ ...prev, [data.key]: data.val() }))
     );
-    // onChildRemoved(messagesRef, (data) =>
-    //   setMessages((prev) => prev.filter((item) => item.key !== data.key))
-    // );
-    // onChildChanged(messagesRef, (data) =>
-    //   setMessages((prev) =>
-    //     prev.map((item) =>
-    //       item.key === data.key ? { key: data.key, val: data.val() } : item
-    //     )
-    //   )
-    // );
-    return () => off(itineraryRef);
+    onChildAdded(accommodationRef, (data) =>
+      setAccommodation((prev) => ({ ...prev, [data.key]: data.val() }))
+    );
+
+    onChildRemoved(flightRef, () => setFlight({}));
+    onChildRemoved(accommodationRef, () => setAccommodation({}));
+
+    onChildChanged(flightRef, (data) =>
+      setFlight((prev) => ({ ...prev, [data.key]: data.val() }))
+    );
+    onChildChanged(accommodationRef, (data) =>
+      setAccommodation((prev) => ({ ...prev, [data.key]: data.val() }))
+    );
+    return () => {
+      off(flightRef);
+      off(accommodationRef);
+    };
   }, []);
+
+  useEffect(() => {
+    console.log(flight, accommodation);
+  }, [flight, accommodation]);
 
   return (
     <>
@@ -162,7 +172,15 @@ export default function Itinerary() {
           </Button>
         </p>
       </form>
-      <p></p>
+      <div>
+        <p>Departing: {flight.departingAirport}</p>
+        <p>Arriving: {flight.arrivingAirport}</p>
+        <p>Flight: {flight.flight}</p>
+      </div>
+      <div>
+        <p>Accommodation: {accommodation.accommodation}</p>
+        <p>Address: {accommodation.address}</p>
+      </div>
     </>
   );
 }
