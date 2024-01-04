@@ -81,11 +81,20 @@ export default function MapCards({ places }) {
   const favPlacesListItems = (places) => {
     console.log("reached favplaces func");
     if (places.length > 0) {
-      return places.map((place) => (
-        <li key={place.key}>
-          <p>{place.val.name}</p>
-          <p>{place.val.address}</p>
-        </li>
+      return places.map((place, index) => (
+        <Card key={place.key}>
+          <CardHeader title={place.val.name} />
+          <CardContent>
+            <p>{place.val.address}</p>
+            <IconButton
+              aria-label="add to favorites"
+              color="primary"
+              onClick={() => deleteSavedFav(favPlaces[index].key)}
+            >
+              <FavoriteIcon />
+            </IconButton>
+          </CardContent>
+        </Card>
       ));
     }
   };
@@ -142,7 +151,8 @@ export default function MapCards({ places }) {
             <CardActions>{varyButton(place, index)}</CardActions>
           </Card>
         ))}
-        <ul>{favPlaces ? favPlacesListItems(favPlaces) : null}</ul>
+        {favPlaces ? <h2>Favourites</h2> : null}
+        {favPlaces ? favPlacesListItems(favPlaces) : null}
       </ThemeProvider>
     </div>
   );
