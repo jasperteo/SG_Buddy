@@ -18,14 +18,11 @@ import {
   update,
   off,
 } from "firebase/database";
-import { deleteObject, ref as storageRef } from "firebase/storage";
 import { database, storage } from "../Components/FirebaseConfig";
+import Planner from "./Planner";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
-
-//define and create the firebase RealTimeDatabase  reference
-const favouriteListRef = ref(database, DB_FAVOURITES_KEY);
 
 //mui color red reference
 const theme = createTheme({
@@ -34,11 +31,14 @@ const theme = createTheme({
   },
 });
 
-export default function MapCards({ places }) {
+export default function MapCards({ places, uid }) {
   //holds information on all places returned from recommendation form
   const [recommendation, setRecommendation] = useState(places);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
+
+  //define and create the firebase RealTimeDatabase  reference
+  const favouriteListRef = ref(database, uid + "/" + DB_FAVOURITES_KEY);
 
   //retrieves the specific recommendation --> add to firebase
   const saveToFavs = (index) => {
@@ -130,8 +130,9 @@ export default function MapCards({ places }) {
             <CardActions>{varyButton(place, index)}</CardActions>
           </Card>
         ))}
-        {favPlaces ? <h2>Favourites</h2> : null}
-        {favPlaces ? favPlacesListItems(favPlaces) : null}
+        {favPlaces && <h2>Favourites</h2>}
+        {favPlaces && favPlacesListItems(favPlaces)}
+        {favPlaces && <Planner places={favPlaces} />}
       </ThemeProvider>
     </div>
   );

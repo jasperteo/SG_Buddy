@@ -135,7 +135,8 @@ export default function RecommendationForm() {
               <Select
                 {...register("category", { required: true })}
                 id="category"
-                defaultValue="">
+                defaultValue=""
+              >
                 <MenuItem value="accommodation">Accommodation</MenuItem>
                 <MenuItem value="attractions">Attractions</MenuItem>
                 <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
