@@ -20,6 +20,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { database, storage } from "./FirebaseConfig";
+import { fontSize } from "@mui/system";
 
 const DB_FLIGHT_KEY = "itinerary/flight";
 const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
@@ -164,7 +165,7 @@ export default function Itinerary({ uid }) {
           <Controller
             name="flight"
             control={control}
-            defaultValue="Singapore Airlines SQ 21"
+            defaultValue="Singapore Airlines SQ 23"
             rules={{ required: "Enter Flight" }}
             render={({ field }) => (
               <TextField
@@ -280,7 +281,7 @@ export default function Itinerary({ uid }) {
         <p>Arriving: {flight.arrivingAirport}</p>
         <p>Flight: {flight.flight}</p>
         <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
-          <iconify-icon icon="mdi:attachment"></iconify-icon>
+          <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
         </a>
       </div>
       <div>
@@ -290,7 +291,7 @@ export default function Itinerary({ uid }) {
           target="_blank"
           href={accommodation.accommodationFileURL}
           rel="noreferrer">
-          <iconify-icon icon="mdi:attachment"></iconify-icon>
+          <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
         </a>
       </div>
     </>
