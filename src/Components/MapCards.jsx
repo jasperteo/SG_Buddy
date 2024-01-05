@@ -17,9 +17,13 @@ import {
   remove,
   update,
   off,
+  getDatabase,
 } from "firebase/database";
 import { database, storage } from "../Components/FirebaseConfig";
 import Planner from "./Planner";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
@@ -36,6 +40,7 @@ export default function MapCards({ places, uid }) {
   const [recommendation, setRecommendation] = useState(places);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
+  const [loginID, setLoginID] = useState(uid);
 
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
@@ -52,6 +57,35 @@ export default function MapCards({ places, uid }) {
       lng: place.lng,
       uuid: place.uuid,
     });
+  };
+
+  //save date const
+  const addDate = (date, place) => {
+    // const date = e.toDateString();
+    console.log(date.$d);
+
+    console.log(place.key);
+    const db = getDatabase();
+    update(ref(db, `/${uid}/favourites/${place.key}`), {
+      name: place.val.name,
+      address: place.val.address,
+      lat: place.val.lat,
+      lng: place.val.lng,
+      uuid: place.val.uuid,
+      date: date.$d,
+    });
+
+    // const updates = {};
+    // updates[place.key] = {
+    //   name: place.val.name,
+    //   address: place.val.address,
+    //   lat: place.val.lat,
+    //   lng: place.val.lng,
+    //   uuid: place.val.uuid,
+    //   date: e,
+    // };
+
+    // update(favouriteListRef, updates);
   };
 
   //deletes specific recommendation using data, which is key
@@ -90,9 +124,18 @@ export default function MapCards({ places, uid }) {
             <IconButton
               aria-label="add to favorites"
               color="primary"
-              onClick={() => deleteSavedFav(favPlaces[index].key)}>
+              onClick={() => deleteSavedFav(favPlaces[index].key)}
+            >
               <FavoriteIcon />
             </IconButton>
+
+            <DatePicker
+              inputFormat="dd/MM/yyyy"
+              label="Basic date picker"
+              disablePast
+              views={["year", "month", "day"]}
+              onChange={(e) => addDate(e, place)}
+            />
           </CardContent>
         </Card>
       ));
@@ -110,7 +153,8 @@ export default function MapCards({ places, uid }) {
         color={favoritePlace ? "primary" : "default"}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }>
+        }
+      >
         <FavoriteIcon />
       </IconButton>
     );
@@ -119,18 +163,20 @@ export default function MapCards({ places, uid }) {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        {places.map((place, index) => (
-          <Card key={place.uuid}>
-            <CardHeader title={place.name} />
-            <CardContent>
-              <p>{place.address}</p>
-            </CardContent>
-            <CardActions>{varyButton(place, index)}</CardActions>
-          </Card>
-        ))}
-        {favPlaces && <h2>Favourites</h2>}
-        {favPlaces && favPlacesListItems(favPlaces)}
-        {favPlaces && <Planner places={favPlaces} uid={uid} />}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          {places.map((place, index) => (
+            <Card key={place.uuid}>
+              <CardHeader title={place.name} />
+              <CardContent>
+                <p>{place.address}</p>
+              </CardContent>
+              <CardActions>{varyButton(place, index)}</CardActions>
+            </Card>
+          ))}
+          {favPlaces && <h2>Favourites</h2>}
+          {favPlaces && favPlacesListItems(favPlaces)}
+          {/* {favPlaces && <Planner places={favPlaces} uid={loginID} />} */}
+        </LocalizationProvider>
       </ThemeProvider>
     </div>
   );
