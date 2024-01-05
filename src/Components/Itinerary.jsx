@@ -34,7 +34,11 @@ export default function Itinerary({ uid }) {
     `${uid}/${DB_ACCOMMODATION_KEY}`
   );
 
-  const { handleSubmit, control } = useForm();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   const writeFlightData = async (data) => {
     let name = "";
@@ -125,12 +129,15 @@ export default function Itinerary({ uid }) {
             name="departingAirport"
             control={control}
             defaultValue="JFK (John F. Kennedy International Airport)"
+            rules={{ required: "Enter Departing Airport" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="departingAirport"
                 label="From"
                 variant="filled"
+                error={!!errors.departingAirport}
+                helperText={errors?.departingAirport?.message}
               />
             )}
           />
@@ -140,12 +147,15 @@ export default function Itinerary({ uid }) {
             name="arrivingAirport"
             control={control}
             defaultValue="SIN (Changi Airport)"
+            rules={{ required: "Enter Arriving Airport" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="arrivingAirport"
                 label="To"
                 variant="filled"
+                error={!!errors.arrivingAirport}
+                helperText={errors?.arrivingAirport?.message}
               />
             )}
           />
@@ -155,12 +165,15 @@ export default function Itinerary({ uid }) {
             name="flight"
             control={control}
             defaultValue="Singapore Airlines SQ 21"
+            rules={{ required: "Enter Flight" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="flight"
                 label="Flight"
                 variant="filled"
+                error={!!errors.flight}
+                helperText={errors?.flight?.message}
               />
             )}
           />
@@ -201,12 +214,15 @@ export default function Itinerary({ uid }) {
             name="accommodation"
             control={control}
             defaultValue="Hilton Singapore Orchard"
+            rules={{ required: "Enter Accommodation" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="accommodation"
                 label="Staying at"
                 variant="filled"
+                error={!!errors.accommodation}
+                helperText={errors?.accommodation?.message}
               />
             )}
           />
@@ -216,12 +232,15 @@ export default function Itinerary({ uid }) {
             name="address"
             control={control}
             defaultValue="333 Orchard Rd, Singapore 238867"
+            rules={{ required: "Enter Address" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="address"
                 label="Address"
                 variant="filled"
+                error={!!errors.address}
+                helperText={errors?.address?.message}
               />
             )}
           />
