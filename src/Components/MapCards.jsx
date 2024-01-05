@@ -38,7 +38,7 @@ export default function MapCards({ places, uid }) {
   const [favPlaces, setFavPlaces] = useState([]);
 
   //define and create the firebase RealTimeDatabase  reference
-  const favouriteListRef = ref(database, uid + "/" + DB_FAVOURITES_KEY);
+  const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
   //retrieves the specific recommendation --> add to firebase
   const saveToFavs = (index) => {
@@ -57,7 +57,7 @@ export default function MapCards({ places, uid }) {
   //deletes specific recommendation using data, which is key
   const deleteSavedFav = (data) => {
     console.log(`delete ${data}`);
-    remove(ref(database, DB_FAVOURITES_KEY + "/" + data));
+    remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function MapCards({ places, uid }) {
       )
     );
     return () => off(favouriteListRef);
-  }, []);
+  }, [uid]);
 
   //renders list of all saved places regardless of category
   const favPlacesListItems = (places) => {
@@ -90,8 +90,7 @@ export default function MapCards({ places, uid }) {
             <IconButton
               aria-label="add to favorites"
               color="primary"
-              onClick={() => deleteSavedFav(favPlaces[index].key)}
-            >
+              onClick={() => deleteSavedFav(favPlaces[index].key)}>
               <FavoriteIcon />
             </IconButton>
           </CardContent>
@@ -111,8 +110,7 @@ export default function MapCards({ places, uid }) {
         color={favoritePlace ? "primary" : "default"}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }
-      >
+        }>
         <FavoriteIcon />
       </IconButton>
     );
