@@ -46,7 +46,12 @@ export default function RecommendationForm() {
     fetcher
   );
 
-  const { register, handleSubmit, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = (data) => {
     setLocation(`${data.firstItem}%2C${data.secondItem}`);
@@ -118,22 +123,34 @@ export default function RecommendationForm() {
               name="radius"
               control={control}
               defaultValue="1000"
+              rules={{
+                required: "Enter a radius",
+                max: { value: 42000, message: "Maximum radius of 42km" },
+                pattern: {
+                  value: /^[0-9]*$/,
+                  message: "Please enter only numbers.",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   id="filled-basic"
                   label="Radius (in metres)"
                   variant="filled"
-                  helperText="Required"
+                  error={!!errors.radius}
+                  helperText={errors?.radius?.message}
                 />
               )}
             />
           </div>
           <div>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 220 }}>
+            <FormControl
+              variant="filled"
+              sx={{ m: 1, minWidth: 220 }}
+              error={!!errors.category}>
               <InputLabel>Category</InputLabel>
               <Select
-                {...register("category", { required: true })}
+                {...register("category", { required: "Select a Category" })}
                 id="category"
                 defaultValue="">
                 <MenuItem value="accommodation">Accommodation</MenuItem>
@@ -147,7 +164,7 @@ export default function RecommendationForm() {
                 <MenuItem value="tours">Tours</MenuItem>
                 <MenuItem value="venues">Venues</MenuItem>
               </Select>
-              <FormHelperText>Required</FormHelperText>
+              <FormHelperText>{errors?.category?.message}</FormHelperText>
             </FormControl>
           </div>
         </>

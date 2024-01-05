@@ -73,7 +73,7 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                     variant="filled"
                     type="email"
                     error={!!errors.email}
-                    helperText={errors.email && errors.email.message}
+                    helperText={errors?.email?.message}
                   />
                 )}
               />
@@ -91,7 +91,7 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                     variant="filled"
                     type="password"
                     error={!!errors.password}
-                    helperText={errors.password && errors.password.message}
+                    helperText={errors?.password?.message}
                   />
                 )}
               />
