@@ -130,7 +130,7 @@ export default function MapCards({ places, uid }) {
         ))}
         {favPlaces && <h2>Favourites</h2>}
         {favPlaces && favPlacesListItems(favPlaces)}
-        {favPlaces && <Planner places={favPlaces} />}
+        {favPlaces && <Planner places={favPlaces} uid={uid} />}
       </ThemeProvider>
     </div>
   );

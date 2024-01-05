@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -8,13 +7,31 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import { Button } from "@mui/material/";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  onChildAdded,
+  onChildChanged,
+  onChildRemoved,
+  ref,
+  set,
+  push,
+  remove,
+  off,
+} from "firebase/database";
+import { database } from "./FirebaseConfig";
 
-export default function Planner({ places }) {
+const DB_ACTIVITY_KEY = "itinerary/activity";
+
+export default function Planner({ places, uid }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [itinerary, setItinerary] = useState({});
 
   console.log("planner");
+
+  //define and create the firebase RealTimeDatabase  reference
+  const activityListRef = ref(database, uid + "/" + DB_ACTIVITY_KEY);
 
   //date picker function to set dates
   const onChangeDates = (dates) => {
@@ -43,25 +60,11 @@ export default function Planner({ places }) {
           },
         ];
       }
-      // } else {
-      //   // If there's no entry for the date, create a new one with the current and new activity
-      //   updatedItinerary[date] = {
-      //     activity: e.target.value.val.name,
-      //     address: e.target.value.val.address,
-      //     activities: [
-      //       {
-      //         activity: updatedItinerary[date].activity,
-      //         address: updatedItinerary[date].address,
-      //       },
-      //       {
-      //         activity: e.target.value.val.name,
-      //         address: e.target.value.val.address,
-      //       },
-      //     ],
-      //   };
     }
 
     setItinerary(updatedItinerary);
+    const newActivityRef = push(activityListRef);
+    set(newActivityRef, { itinerary });
   };
 
   //difference between start and end to calculate number of days
@@ -121,6 +124,17 @@ export default function Planner({ places }) {
     return section;
   };
 
+  //delete activities under specific date
+  const deleteActivities = (date) => {
+    //copy over existing itinerary
+    const updatedItinerary = { ...itinerary };
+
+    // empty activity array only for that specific date
+    updatedItinerary[date].activities = [];
+
+    setItinerary(updatedItinerary);
+  };
+
   //for each day, render a new card to store itinerary for that day
   const renderCards = () => {
     const itineraryKeys = Object.keys(itinerary);
@@ -153,12 +167,20 @@ export default function Planner({ places }) {
                 </Select>
               </FormControl>
             )}
-            {/* {itinerary[date].activities && ( */}
             <div>
               <ul>
                 {itinerary[date].activities &&
                   renderActivities(itinerary[date].activities)}
               </ul>
+              {itinerary[date].activities && (
+                <Button
+                  // onClick={deleteActivities(date)}
+                  variant="primary"
+                  endIcon={<DeleteIcon />}
+                >
+                  Delete
+                </Button>
+              )}
             </div>
             {/* )} */}
           </CardContent>
