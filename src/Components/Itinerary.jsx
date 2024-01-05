@@ -179,7 +179,8 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteFlightData}
             variant="contained"
-            endIcon={<DeleteIcon />}>
+            endIcon={<DeleteIcon />}
+          >
             Delete
           </Button>{" "}
           <Controller
@@ -190,7 +191,8 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}>
+                endIcon={<CloudUploadIcon />}
+              >
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -240,7 +242,8 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteAccommodationData}
             variant="contained"
-            endIcon={<DeleteIcon />}>
+            endIcon={<DeleteIcon />}
+          >
             Delete
           </Button>{" "}
           <Controller
@@ -251,7 +254,8 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}>
+                endIcon={<CloudUploadIcon />}
+              >
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -277,7 +281,8 @@ export default function Itinerary({ uid }) {
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
-          rel="noreferrer">
+          rel="noreferrer"
+        >
           <iconify-icon icon="mdi:attachment"></iconify-icon>
         </a>
       </div>
