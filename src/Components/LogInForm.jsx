@@ -129,8 +129,8 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
           )}
         </p>
       </form>
-      {email && <p>Welcome! {email}</p>}
-      {uid && <p>Your UID: {uid}</p>}
+      {!!email && <p>Welcome! {email}</p>}
+      {!!uid && <p>Your UID: {uid}</p>}
     </>
   );
 }

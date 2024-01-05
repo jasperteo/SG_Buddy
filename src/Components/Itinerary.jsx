@@ -28,10 +28,10 @@ export default function Itinerary({ uid }) {
   const [flight, setFlight] = useState({});
   const [accommodation, setAccommodation] = useState({});
 
-  const flightRef = databaseRef(database, uid + "/" + DB_FLIGHT_KEY);
+  const flightRef = databaseRef(database, `${uid}/${DB_FLIGHT_KEY}`);
   const accommodationRef = databaseRef(
     database,
-    uid + "/" + DB_ACCOMMODATION_KEY
+    `${uid}/${DB_ACCOMMODATION_KEY}`
   );
 
   const { handleSubmit, control } = useForm();
@@ -42,7 +42,7 @@ export default function Itinerary({ uid }) {
     if (data.flightFile) {
       const newStorageRef = storageRef(
         storage,
-        uid + "/" + DB_FLIGHT_KEY + "/" + data.flightFile.name
+        `${uid}/${DB_FLIGHT_KEY}/${data.flightFile.name}`
       );
       await uploadBytes(newStorageRef, data.flightFile);
       url = await getDownloadURL(newStorageRef);
@@ -62,7 +62,7 @@ export default function Itinerary({ uid }) {
     if (data.accommodationFile) {
       const newStorageRef = storageRef(
         storage,
-        uid + "/" + DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
+        `${uid}/${DB_ACCOMMODATION_KEY}/${data.accommodationFile.name}`
       );
       await uploadBytes(newStorageRef, data.accommodationFile);
       url = await getDownloadURL(newStorageRef);
@@ -79,10 +79,7 @@ export default function Itinerary({ uid }) {
   const deleteFlightData = async () => {
     if (flight.flightFileName) {
       await deleteObject(
-        storageRef(
-          storage,
-          uid + "/" + DB_FLIGHT_KEY + "/" + flight.flightFileName
-        )
+        storageRef(storage, `${uid}/${DB_FLIGHT_KEY}/${flight.flightFileName}`)
       );
     }
     remove(flightRef);
@@ -92,11 +89,7 @@ export default function Itinerary({ uid }) {
       await deleteObject(
         storageRef(
           storage,
-          uid +
-            "/" +
-            DB_ACCOMMODATION_KEY +
-            "/" +
-            accommodation.accommodationFileName
+          `${uid}/${DB_ACCOMMODATION_KEY}/${accommodation.accommodationFileName}`
         )
       );
     }
@@ -179,8 +172,7 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteFlightData}
             variant="contained"
-            endIcon={<DeleteIcon />}
-          >
+            endIcon={<DeleteIcon />}>
             Delete
           </Button>{" "}
           <Controller
@@ -191,8 +183,7 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}
-              >
+                endIcon={<CloudUploadIcon />}>
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -242,8 +233,7 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteAccommodationData}
             variant="contained"
-            endIcon={<DeleteIcon />}
-          >
+            endIcon={<DeleteIcon />}>
             Delete
           </Button>{" "}
           <Controller
@@ -254,8 +244,7 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}
-              >
+                endIcon={<CloudUploadIcon />}>
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -281,8 +270,7 @@ export default function Itinerary({ uid }) {
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
-          rel="noreferrer"
-        >
+          rel="noreferrer">
           <iconify-icon icon="mdi:attachment"></iconify-icon>
         </a>
       </div>

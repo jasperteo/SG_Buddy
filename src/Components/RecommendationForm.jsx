@@ -1,6 +1,5 @@
 import {
   Button,
-  CircularProgress,
   TextField,
   InputLabel,
   MenuItem,
@@ -20,7 +19,7 @@ export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
-  const [radius, setRadius] = useState(1000);
+  const [radius, setRadius] = useState(0);
 
   const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
@@ -152,8 +151,7 @@ export default function RecommendationForm() {
               <Select
                 {...register("category", { required: "Select a Category" })}
                 id="category"
-                defaultValue=""
-              >
+                defaultValue="">
                 <MenuItem value="accommodation">Accommodation</MenuItem>
                 <MenuItem value="attractions">Attractions</MenuItem>
                 <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
@@ -175,10 +173,14 @@ export default function RecommendationForm() {
           </Button>
         </p>
       </form>
-      {!!isLoading && (
+      {isLoading && (
         <p>
           Loading...
-          <CircularProgress />
+          <iconify-icon
+            inline
+            icon="line-md:loading-twotone-loop"
+            style={{ fontSize: "1.5em" }}
+          />
         </p>
       )}
       {suggestionError?.message}
@@ -188,8 +190,8 @@ export default function RecommendationForm() {
             <li key={place.uuid}>{place.name}</li>
           ))}
       </ul>
-      {suggestionParsed && <GoogleMap places={suggestionParsed} />}
-      {suggestionParsed && <MapCards places={suggestionParsed} />}
+      {!!suggestionParsed && <GoogleMap places={suggestionParsed} />}
+      {!!suggestionParsed && <MapCards places={suggestionParsed} />}
     </>
   );
 }
