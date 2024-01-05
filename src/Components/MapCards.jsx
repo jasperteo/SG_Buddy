@@ -130,9 +130,9 @@ export default function MapCards({ places, uid }) {
             <CardActions>{varyButton(place, index)}</CardActions>
           </Card>
         ))}
-        {favPlaces ? <h2>Favourites</h2> : null}
-        {favPlaces ? favPlacesListItems(favPlaces) : null}
-        <Planner places={favPlaces} />
+        {favPlaces && <h2>Favourites</h2>}
+        {favPlaces && favPlacesListItems(favPlaces)}
+        {favPlaces && <Planner places={favPlaces} />}
       </ThemeProvider>
     </div>
   );

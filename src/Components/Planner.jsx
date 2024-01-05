@@ -10,10 +10,11 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
 export default function Planner({ places }) {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [itinerary, setItinerary] = useState({});
-  const [activity, setActivity] = useState("");
+
+  console.log("planner");
 
   //date picker function to set dates
   const onChangeDates = (dates) => {
@@ -22,8 +23,9 @@ export default function Planner({ places }) {
     setEndDate(end);
   };
 
-  const handleChange = (event) => {
-    setActivity(event.target.value);
+  const handleChange = (date, e) => {
+    console.log(date);
+    setItinerary((itinerary.date = e.target.value));
   };
 
   //difference between start and end to calculate number of days
@@ -35,7 +37,7 @@ export default function Planner({ places }) {
 
     // Convert milliseconds to days
     const differenceInDays =
-      1 + differenceInMilliseconds / (1000 * 60 * 60 * 24);
+      1 + Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
 
     return differenceInDays;
   };
@@ -61,43 +63,40 @@ export default function Planner({ places }) {
     setItinerary(generateDates());
   }, [startDate, endDate]);
 
-  //for every 1 day in differenceInDays, render a new card to store itinerary for that day
+  //for each day, render a new card to store itinerary for that day
   const renderCards = () => {
-    const startDateObj = new Date(startDate);
-    const differenceInDays = calculateDateDifference();
+    const itineraryKeys = Object.keys(itinerary);
     const cards = [];
 
-    for (let i = 0; i < differenceInDays; i++) {
-      const currentDate = new Date(
-        startDateObj.getTime() + i * 24 * 60 * 60 * 1000
-      );
+    itineraryKeys.forEach((date, index) => {
       cards.push(
-        <Card key={i}>
+        <Card key={index}>
           <CardContent>
-            <h3>{currentDate.toDateString()}</h3>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Saved places
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label="places"
-                value={activity}
-                onChange={handleChange}
-              >
-                {places &&
-                  places.map((place, index) => (
+            <h3>{date}</h3>
+            {places && (
+              <FormControl fullWidth>
+                <InputLabel id={`demo-simple-select-label-${index}`}>
+                  Saved places
+                </InputLabel>
+                <Select
+                  labelId={`demo-simple-select-label-${index}`}
+                  id={`demo-simple-select-${index}`}
+                  label="places"
+                  value={itinerary[date].activity} // Assuming you have an 'activity' property in each date's object
+                  onChange={(e) => handleChange(date, e)} // Pass the date to the handleChange function
+                >
+                  {places.map((place) => (
                     <MenuItem key={place.key} value={place.val.name}>
                       {place.val.name}
                     </MenuItem>
                   ))}
-              </Select>
-            </FormControl>
+                </Select>
+              </FormControl>
+            )}
           </CardContent>
         </Card>
       );
-    }
+    });
 
     return cards;
   };
@@ -115,8 +114,8 @@ export default function Planner({ places }) {
         inline
         showDisabledMonthNavigation
       />
-      <p> Difference in days: {calculateDateDifference()}</p>
-      {renderCards()}
+      <p>Difference in days:{endDate && calculateDateDifference()} </p>
+      {/* {Object.keys(itinerary).length !== 0 && renderCards()} */}
     </div>
   );
 }
