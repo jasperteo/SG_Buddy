@@ -31,7 +31,7 @@ export default function Planner({ places, uid }) {
   console.log("planner");
 
   //define and create the firebase RealTimeDatabase  reference
-  const actvitiyListRef = ref(database, uid + "/" + DB_ACTIVITY_KEY);
+  const activityListRef = ref(database, uid + "/" + DB_ACTIVITY_KEY);
 
   //date picker function to set dates
   const onChangeDates = (dates) => {
@@ -63,7 +63,7 @@ export default function Planner({ places, uid }) {
     }
 
     setItinerary(updatedItinerary);
-    const newActivityRef = push(actvitiyListRef);
+    const newActivityRef = push(activityListRef);
     set(newActivityRef, { itinerary });
   };
 
