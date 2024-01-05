@@ -1,4 +1,3 @@
-import { useForm, Controller } from "react-hook-form";
 import {
   Button,
   CircularProgress,
@@ -10,6 +9,7 @@ import {
   FormHelperText,
 } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
+import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import useSWR from "swr";
 import { useState } from "react";
@@ -94,13 +94,9 @@ export default function RecommendationForm() {
                 id="firstItem"
                 label="First Item"
                 variant="filled"
-                helperText="Required"
               />
             )}
-          />
-        </div>
-        <br />
-        <div>
+          />{" "}
           <Controller
             name="secondItem"
             control={control}
@@ -111,51 +107,50 @@ export default function RecommendationForm() {
                 id="secondItem"
                 label="Second Item"
                 variant="filled"
-                helperText="Required"
               />
             )}
           />
         </div>
         <br />
-        <div>
-          <Controller
-            name="radius"
-            control={control}
-            defaultValue="1000"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="filled-basic"
-                label="Radius (in metres)"
-                variant="filled"
-                helperText="Required"
-              />
-            )}
-          />
-        </div>
-        <br />
-        <div>
-          <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              {...register("category", { required: true })}
-              id="category"
-              defaultValue=""
-            >
-              <MenuItem value="accommodation">Accommodation</MenuItem>
-              <MenuItem value="attractions">Attractions</MenuItem>
-              <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
-              <MenuItem value="cruises">Cruises</MenuItem>
-              <MenuItem value="events">Events</MenuItem>
-              <MenuItem value="food_beverages">Food & Beverages</MenuItem>
-              <MenuItem value="precincts">Precincts</MenuItem>
-              <MenuItem value="shops">Shops</MenuItem>
-              <MenuItem value="tours">Tours</MenuItem>
-              <MenuItem value="venues">Venues</MenuItem>
-            </Select>
-            <FormHelperText>Required</FormHelperText>
-          </FormControl>
-        </div>
+        <>
+          <div>
+            <Controller
+              name="radius"
+              control={control}
+              defaultValue="1000"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  id="filled-basic"
+                  label="Radius (in metres)"
+                  variant="filled"
+                  helperText="Required"
+                />
+              )}
+            />
+          </div>
+          <div>
+            <FormControl variant="filled" sx={{ m: 1, minWidth: 220 }}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                {...register("category", { required: true })}
+                id="category"
+                defaultValue="">
+                <MenuItem value="accommodation">Accommodation</MenuItem>
+                <MenuItem value="attractions">Attractions</MenuItem>
+                <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
+                <MenuItem value="cruises">Cruises</MenuItem>
+                <MenuItem value="events">Events</MenuItem>
+                <MenuItem value="food_beverages">Food & Beverages</MenuItem>
+                <MenuItem value="precincts">Precincts</MenuItem>
+                <MenuItem value="shops">Shops</MenuItem>
+                <MenuItem value="tours">Tours</MenuItem>
+                <MenuItem value="venues">Venues</MenuItem>
+              </Select>
+              <FormHelperText>Required</FormHelperText>
+            </FormControl>
+          </div>
+        </>
         <p>
           <Button type="submit" variant="contained" endIcon={<SendIcon />}>
             Send

@@ -1,22 +1,14 @@
 import { useForm, Controller } from "react-hook-form";
 import { Button, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
-import { useState, useEffect } from "react";
 import { auth } from "./FirebaseConfig";
 import {
-  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 
-export default function LogInForm() {
-  //check login status
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  //user info
-  const [email, setEmail] = useState("");
-  const [uid, setUid] = useState("");
-
+export default function LogInForm({ isLoggedIn, email, uid }) {
   const {
     control,
     handleSubmit,
@@ -52,88 +44,93 @@ export default function LogInForm() {
   const logOut = async () => {
     try {
       await signOut(auth);
-      setUid("");
-      setEmail("");
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsLoggedIn(true);
-        setEmail(auth.currentUser.email);
-        setUid(auth.currentUser.uid);
-      } else setIsLoggedIn(false);
-    });
-  }, []);
-
   return (
     <>
       <form>
-        <div>
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            rules={{ required: "Email is required" }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Email"
-                variant="filled"
-                type="email"
-                error={!!errors.email}
-                helperText={errors.email && errors.email.message}
+        {isLoggedIn ? null : (
+          <>
+            <div>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "Invalid email address",
+                  },
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Email"
+                    variant="filled"
+                    type="email"
+                    error={!!errors.email}
+                    helperText={errors.email && errors.email.message}
+                  />
+                )}
               />
-            )}
-          />
-        </div>
-        <div>
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            rules={{ required: "Password is required" }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Password"
-                variant="filled"
-                type="password"
-                error={!!errors.password}
-                helperText={errors.password && errors.password.message}
+            </div>
+            <div>
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                rules={{ required: "Password is required" }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Password"
+                    variant="filled"
+                    type="password"
+                    error={!!errors.password}
+                    helperText={errors.password && errors.password.message}
+                  />
+                )}
               />
-            )}
-          />
-        </div>
+            </div>
+          </>
+        )}
         <p>
-          <Button
-            onClick={handleSubmit(logIn)}
-            type="submit"
-            variant="contained"
-            endIcon={<SendIcon />}>
-            Log In
-          </Button>{" "}
-          <Button
-            onClick={handleSubmit(signUp)}
-            type="submit"
-            variant="contained"
-            endIcon={<SendIcon />}>
-            Sign Up
-          </Button>{" "}
-          <Button
-            onClick={logOut}
-            type="submit"
-            variant="contained"
-            endIcon={<SendIcon />}>
-            Log Out
-          </Button>
+          {isLoggedIn ? (
+            <>
+              <Button
+                onClick={logOut}
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}>
+                Log Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={handleSubmit(logIn)}
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}>
+                Log In
+              </Button>{" "}
+              <Button
+                onClick={handleSubmit(signUp)}
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}>
+                Sign Up
+              </Button>
+            </>
+          )}
         </p>
       </form>
-      <p>Email: {email}</p>
-      <p>UID: {uid}</p>
+      {email && <p>Welcome! {email}</p>}
+      {uid && <p>Your UID: {uid}</p>}
     </>
   );
 }
