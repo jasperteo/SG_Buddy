@@ -31,7 +31,7 @@ export default function Planner({ places, uid }) {
   console.log("planner");
 
   //define and create the firebase RealTimeDatabase  reference
-  const activityListRef = ref(database, uid + "/" + DB_ACTIVITY_KEY);
+  const activityListRef = ref(database, `${uid}/${DB_ACTIVITY_KEY}`);
 
   //date picker function to set dates
   const onChangeDates = (dates) => {
@@ -62,9 +62,12 @@ export default function Planner({ places, uid }) {
       }
     }
 
-    setItinerary(updatedItinerary);
+    // Push flattened itinerary to the database
     const newActivityRef = push(activityListRef);
-    set(newActivityRef, { itinerary });
+    set(newActivityRef, {
+      date: date,
+      activity: e.target.value.val.name,
+    });
   };
 
   //difference between start and end to calculate number of days
@@ -81,7 +84,10 @@ export default function Planner({ places, uid }) {
     return differenceInDays;
   };
 
-  const totalDays = calculateDateDifference();
+  //function to update places when there is more than 1
+  const editActivity = async (e) => {
+    e.preventDefault();
+  };
 
   //itinerary state stores all information on dates/ places added
   //function below adds new dates to state for each individual day
@@ -147,7 +153,7 @@ export default function Planner({ places, uid }) {
           <CardContent>
             <h3>{date}</h3>
 
-            {places && (
+            {itinerary[date].activities.length === 0 && (
               <FormControl fullWidth>
                 <InputLabel id={`demo-simple-select-label-${index}`}>
                   Saved places
@@ -193,7 +199,7 @@ export default function Planner({ places, uid }) {
 
   return (
     <div>
-      <p>Add trip dates</p>
+      <p>When do you want to visit?</p>
       <DatePicker
         selected={startDate}
         onChange={onChangeDates}
