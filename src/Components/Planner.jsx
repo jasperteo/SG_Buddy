@@ -24,8 +24,44 @@ export default function Planner({ places }) {
   };
 
   const handleChange = (date, e) => {
-    console.log(date);
-    setItinerary((itinerary.date = e.target.value));
+    const updatedItinerary = { ...itinerary };
+
+    // Check if there's an existing entry for the date
+    if (updatedItinerary[date]) {
+      // If there's an 'activities' array, add the new activity
+      if (updatedItinerary[date].activities) {
+        updatedItinerary[date].activities.push({
+          activity: e.target.value.val.name,
+          address: e.target.value.val.address,
+        });
+      } else {
+        // If there's no 'activities' array, create a new one with the current and new activity
+        updatedItinerary[date].activities = [
+          {
+            activity: e.target.value.val.name,
+            address: e.target.value.val.address,
+          },
+        ];
+      }
+      // } else {
+      //   // If there's no entry for the date, create a new one with the current and new activity
+      //   updatedItinerary[date] = {
+      //     activity: e.target.value.val.name,
+      //     address: e.target.value.val.address,
+      //     activities: [
+      //       {
+      //         activity: updatedItinerary[date].activity,
+      //         address: updatedItinerary[date].address,
+      //       },
+      //       {
+      //         activity: e.target.value.val.name,
+      //         address: e.target.value.val.address,
+      //       },
+      //     ],
+      //   };
+    }
+
+    setItinerary(updatedItinerary);
   };
 
   //difference between start and end to calculate number of days
@@ -41,6 +77,8 @@ export default function Planner({ places }) {
 
     return differenceInDays;
   };
+
+  const totalDays = calculateDateDifference();
 
   //itinerary state stores all information on dates/ places added
   //function below adds new dates to state for each individual day
@@ -60,12 +98,33 @@ export default function Planner({ places }) {
 
   //changes dates in itinerary state in event of dates change
   useEffect(() => {
-    setItinerary(generateDates());
+    if (startDate && endDate) {
+      setItinerary(generateDates());
+    }
   }, [startDate, endDate]);
+
+  //render activities under individual date
+  const renderActivities = (activities) => {
+    console.log(activities);
+    const section = [];
+
+    console.log(section);
+    for (let i = 0; i < activities.length; i++) {
+      section.push(
+        <p key={i}>
+          {" "}
+          {activities[i].activity} <br></br> {activities[i].address}
+        </p>
+      );
+    }
+
+    return section;
+  };
 
   //for each day, render a new card to store itinerary for that day
   const renderCards = () => {
     const itineraryKeys = Object.keys(itinerary);
+    console.log(itineraryKeys);
     const cards = [];
 
     itineraryKeys.forEach((date, index) => {
@@ -73,6 +132,7 @@ export default function Planner({ places }) {
         <Card key={index}>
           <CardContent>
             <h3>{date}</h3>
+
             {places && (
               <FormControl fullWidth>
                 <InputLabel id={`demo-simple-select-label-${index}`}>
@@ -82,17 +142,25 @@ export default function Planner({ places }) {
                   labelId={`demo-simple-select-label-${index}`}
                   id={`demo-simple-select-${index}`}
                   label="places"
-                  value={itinerary[date].activity} // Assuming you have an 'activity' property in each date's object
+                  value={itinerary[date].activity}
                   onChange={(e) => handleChange(date, e)} // Pass the date to the handleChange function
                 >
                   {places.map((place) => (
-                    <MenuItem key={place.key} value={place.val.name}>
+                    <MenuItem key={place.key} value={place}>
                       {place.val.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             )}
+            {/* {itinerary[date].activities && ( */}
+            <div>
+              <ul>
+                {itinerary[date].activities &&
+                  renderActivities(itinerary[date].activities)}
+              </ul>
+            </div>
+            {/* )} */}
           </CardContent>
         </Card>
       );
@@ -115,7 +183,7 @@ export default function Planner({ places }) {
         showDisabledMonthNavigation
       />
       <p>Difference in days:{endDate && calculateDateDifference()} </p>
-      {/* {Object.keys(itinerary).length !== 0 && renderCards()} */}
+      {endDate && renderCards()}
     </div>
   );
 }
