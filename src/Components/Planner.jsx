@@ -24,8 +24,15 @@ export default function Planner({ places }) {
   };
 
   const handleChange = (date, e) => {
-    console.log(date);
-    setItinerary((itinerary.date = e.target.value));
+    const updatedItinerary = { ...itinerary };
+
+    // Update the activity for the specific date
+    updatedItinerary[date] = {
+      ...updatedItinerary[date],
+      activity: e.target.value,
+    };
+
+    setItinerary(updatedItinerary);
   };
 
   //difference between start and end to calculate number of days
@@ -41,6 +48,8 @@ export default function Planner({ places }) {
 
     return differenceInDays;
   };
+
+  const totalDays = calculateDateDifference();
 
   //itinerary state stores all information on dates/ places added
   //function below adds new dates to state for each individual day
@@ -60,12 +69,15 @@ export default function Planner({ places }) {
 
   //changes dates in itinerary state in event of dates change
   useEffect(() => {
-    setItinerary(generateDates());
+    if (startDate && endDate) {
+      setItinerary(generateDates());
+    }
   }, [startDate, endDate]);
 
   //for each day, render a new card to store itinerary for that day
   const renderCards = () => {
     const itineraryKeys = Object.keys(itinerary);
+    console.log(itineraryKeys);
     const cards = [];
 
     itineraryKeys.forEach((date, index) => {
@@ -82,7 +94,9 @@ export default function Planner({ places }) {
                   labelId={`demo-simple-select-label-${index}`}
                   id={`demo-simple-select-${index}`}
                   label="places"
-                  value={itinerary[date].activity} // Assuming you have an 'activity' property in each date's object
+                  value={
+                    itinerary[date].activity ? itinerary[date].activity : ""
+                  } // Assuming you have an 'activity' property in each date's object
                   onChange={(e) => handleChange(date, e)} // Pass the date to the handleChange function
                 >
                   {places.map((place) => (
@@ -115,7 +129,7 @@ export default function Planner({ places }) {
         showDisabledMonthNavigation
       />
       <p>Difference in days:{endDate && calculateDateDifference()} </p>
-      {/* {Object.keys(itinerary).length !== 0 && renderCards()} */}
+      {endDate && renderCards()}
     </div>
   );
 }
