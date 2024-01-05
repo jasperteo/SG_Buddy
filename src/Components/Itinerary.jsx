@@ -20,6 +20,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { database, storage } from "./FirebaseConfig";
+import { fontSize } from "@mui/system";
 
 const DB_FLIGHT_KEY = "itinerary/flight";
 const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
@@ -28,13 +29,17 @@ export default function Itinerary({ uid }) {
   const [flight, setFlight] = useState({});
   const [accommodation, setAccommodation] = useState({});
 
-  const flightRef = databaseRef(database, uid + "/" + DB_FLIGHT_KEY);
+  const flightRef = databaseRef(database, `${uid}/${DB_FLIGHT_KEY}`);
   const accommodationRef = databaseRef(
     database,
-    uid + "/" + DB_ACCOMMODATION_KEY
+    `${uid}/${DB_ACCOMMODATION_KEY}`
   );
 
-  const { handleSubmit, control } = useForm();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   const writeFlightData = async (data) => {
     let name = "";
@@ -42,7 +47,7 @@ export default function Itinerary({ uid }) {
     if (data.flightFile) {
       const newStorageRef = storageRef(
         storage,
-        uid + "/" + DB_FLIGHT_KEY + "/" + data.flightFile.name
+        `${uid}/${DB_FLIGHT_KEY}/${data.flightFile.name}`
       );
       await uploadBytes(newStorageRef, data.flightFile);
       url = await getDownloadURL(newStorageRef);
@@ -62,7 +67,7 @@ export default function Itinerary({ uid }) {
     if (data.accommodationFile) {
       const newStorageRef = storageRef(
         storage,
-        uid + "/" + DB_ACCOMMODATION_KEY + "/" + data.accommodationFile.name
+        `${uid}/${DB_ACCOMMODATION_KEY}/${data.accommodationFile.name}`
       );
       await uploadBytes(newStorageRef, data.accommodationFile);
       url = await getDownloadURL(newStorageRef);
@@ -79,10 +84,7 @@ export default function Itinerary({ uid }) {
   const deleteFlightData = async () => {
     if (flight.flightFileName) {
       await deleteObject(
-        storageRef(
-          storage,
-          uid + "/" + DB_FLIGHT_KEY + "/" + flight.flightFileName
-        )
+        storageRef(storage, `${uid}/${DB_FLIGHT_KEY}/${flight.flightFileName}`)
       );
     }
     remove(flightRef);
@@ -92,11 +94,7 @@ export default function Itinerary({ uid }) {
       await deleteObject(
         storageRef(
           storage,
-          uid +
-            "/" +
-            DB_ACCOMMODATION_KEY +
-            "/" +
-            accommodation.accommodationFileName
+          `${uid}/${DB_ACCOMMODATION_KEY}/${accommodation.accommodationFileName}`
         )
       );
     }
@@ -122,7 +120,7 @@ export default function Itinerary({ uid }) {
       off(flightRef);
       off(accommodationRef);
     };
-  }, []);
+  }, [uid]);
 
   return (
     <>
@@ -132,12 +130,15 @@ export default function Itinerary({ uid }) {
             name="departingAirport"
             control={control}
             defaultValue="JFK (John F. Kennedy International Airport)"
+            rules={{ required: "Enter Departing Airport" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="departingAirport"
                 label="From"
                 variant="filled"
+                error={!!errors.departingAirport}
+                helperText={errors?.departingAirport?.message}
               />
             )}
           />
@@ -147,12 +148,15 @@ export default function Itinerary({ uid }) {
             name="arrivingAirport"
             control={control}
             defaultValue="SIN (Changi Airport)"
+            rules={{ required: "Enter Arriving Airport" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="arrivingAirport"
                 label="To"
                 variant="filled"
+                error={!!errors.arrivingAirport}
+                helperText={errors?.arrivingAirport?.message}
               />
             )}
           />
@@ -161,13 +165,16 @@ export default function Itinerary({ uid }) {
           <Controller
             name="flight"
             control={control}
-            defaultValue="Singapore Airlines SQ 21"
+            defaultValue="Singapore Airlines SQ 23"
+            rules={{ required: "Enter Flight" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="flight"
                 label="Flight"
                 variant="filled"
+                error={!!errors.flight}
+                helperText={errors?.flight?.message}
               />
             )}
           />
@@ -179,8 +186,7 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteFlightData}
             variant="contained"
-            endIcon={<DeleteIcon />}
-          >
+            endIcon={<DeleteIcon />}>
             Delete
           </Button>{" "}
           <Controller
@@ -191,8 +197,7 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}
-              >
+                endIcon={<CloudUploadIcon />}>
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -210,12 +215,15 @@ export default function Itinerary({ uid }) {
             name="accommodation"
             control={control}
             defaultValue="Hilton Singapore Orchard"
+            rules={{ required: "Enter Accommodation" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="accommodation"
                 label="Staying at"
                 variant="filled"
+                error={!!errors.accommodation}
+                helperText={errors?.accommodation?.message}
               />
             )}
           />
@@ -225,12 +233,15 @@ export default function Itinerary({ uid }) {
             name="address"
             control={control}
             defaultValue="333 Orchard Rd, Singapore 238867"
+            rules={{ required: "Enter Address" }}
             render={({ field }) => (
               <TextField
                 {...field}
                 id="address"
                 label="Address"
                 variant="filled"
+                error={!!errors.address}
+                helperText={errors?.address?.message}
               />
             )}
           />
@@ -242,8 +253,7 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteAccommodationData}
             variant="contained"
-            endIcon={<DeleteIcon />}
-          >
+            endIcon={<DeleteIcon />}>
             Delete
           </Button>{" "}
           <Controller
@@ -254,8 +264,7 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}
-              >
+                endIcon={<CloudUploadIcon />}>
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -272,18 +281,17 @@ export default function Itinerary({ uid }) {
         <p>Arriving: {flight.arrivingAirport}</p>
         <p>Flight: {flight.flight}</p>
         <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
-          <iconify-icon icon="mdi:attachment"></iconify-icon>
+          <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
         </a>
       </div>
       <div>
-        <p>Accommodation: {accommodation.accommodation}</p>
-        <p>Address: {accommodation.address}</p>
+        <p>Accommodation: {accommodation?.accommodation}</p>
+        <p>Address: {accommodation?.address}</p>
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
-          rel="noreferrer"
-        >
-          <iconify-icon icon="mdi:attachment"></iconify-icon>
+          rel="noreferrer">
+          <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
         </a>
       </div>
     </>

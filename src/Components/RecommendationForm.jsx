@@ -1,6 +1,5 @@
 import {
   Button,
-  CircularProgress,
   TextField,
   InputLabel,
   MenuItem,
@@ -20,7 +19,7 @@ export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
-  const [radius, setRadius] = useState(1000);
+  const [radius, setRadius] = useState(0);
 
   const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
@@ -46,7 +45,12 @@ export default function RecommendationForm() {
     fetcher
   );
 
-  const { register, handleSubmit, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = (data) => {
     setLocation(`${data.firstItem}%2C${data.secondItem}`);
@@ -118,25 +122,36 @@ export default function RecommendationForm() {
               name="radius"
               control={control}
               defaultValue="1000"
+              rules={{
+                required: "Enter a radius",
+                max: { value: 42000, message: "Maximum radius of 42km" },
+                pattern: {
+                  value: /^[0-9]*$/,
+                  message: "Please enter only numbers.",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   id="filled-basic"
                   label="Radius (in metres)"
                   variant="filled"
-                  helperText="Required"
+                  error={!!errors.radius}
+                  helperText={errors?.radius?.message}
                 />
               )}
             />
           </div>
           <div>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 220 }}>
+            <FormControl
+              variant="filled"
+              sx={{ m: 1, minWidth: 220 }}
+              error={!!errors.category}>
               <InputLabel>Category</InputLabel>
               <Select
-                {...register("category", { required: true })}
+                {...register("category", { required: "Select a Category" })}
                 id="category"
-                defaultValue=""
-              >
+                defaultValue="">
                 <MenuItem value="accommodation">Accommodation</MenuItem>
                 <MenuItem value="attractions">Attractions</MenuItem>
                 <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
@@ -148,7 +163,7 @@ export default function RecommendationForm() {
                 <MenuItem value="tours">Tours</MenuItem>
                 <MenuItem value="venues">Venues</MenuItem>
               </Select>
-              <FormHelperText>Required</FormHelperText>
+              <FormHelperText>{errors?.category?.message}</FormHelperText>
             </FormControl>
           </div>
         </>
@@ -158,10 +173,14 @@ export default function RecommendationForm() {
           </Button>
         </p>
       </form>
-      {!!isLoading && (
+      {isLoading && (
         <p>
           Loading...
-          <CircularProgress />
+          <iconify-icon
+            inline
+            icon="line-md:loading-twotone-loop"
+            style={{ fontSize: "1.5em" }}
+          />
         </p>
       )}
       {suggestionError?.message}
@@ -171,8 +190,8 @@ export default function RecommendationForm() {
             <li key={place.uuid}>{place.name}</li>
           ))}
       </ul>
-      {suggestionParsed && <GoogleMap places={suggestionParsed} />}
-      {suggestionParsed && <MapCards places={suggestionParsed} />}
+      {!!suggestionParsed && <GoogleMap places={suggestionParsed} />}
+      {!!suggestionParsed && <MapCards places={suggestionParsed} />}
     </>
   );
 }
