@@ -119,7 +119,7 @@ export default function Itinerary({ uid }) {
       off(flightRef);
       off(accommodationRef);
     };
-  }, []);
+  }, [uid]);
 
   return (
     <>
@@ -284,8 +284,8 @@ export default function Itinerary({ uid }) {
         </a>
       </div>
       <div>
-        <p>Accommodation: {accommodation.accommodation}</p>
-        <p>Address: {accommodation.address}</p>
+        <p>Accommodation: {accommodation?.accommodation}</p>
+        <p>Address: {accommodation?.address}</p>
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
