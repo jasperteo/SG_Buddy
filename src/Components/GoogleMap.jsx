@@ -4,8 +4,6 @@ import {
   InfoWindow,
   AdvancedMarker,
 } from "@vis.gl/react-google-maps";
-// import { MarkerClusterer } from "@googlemaps/markerclusterer";
-// import { Marker } from "@googlemaps/markerclusterer";
 import { useEffect, useState, useRef } from "react";
 
 export default function GoogleMap({ places }) {
