@@ -1,5 +1,6 @@
 import FlightForm from "./FlightForm";
 import AccommodationForm from "./AccommodationForm";
+import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
 
 export default function Itinerary({ uid }) {
   return (
@@ -7,6 +8,8 @@ export default function Itinerary({ uid }) {
       <FlightForm uid={uid} />
       <br />
       <AccommodationForm uid={uid} />
+      <br />
+      <ItinerarySavedPlaces />
     </>
   );
 }
