@@ -146,12 +146,14 @@ export default function RecommendationForm() {
             <FormControl
               variant="filled"
               sx={{ m: 1, minWidth: 220 }}
-              error={!!errors.category}>
+              error={!!errors.category}
+            >
               <InputLabel>Category</InputLabel>
               <Select
                 {...register("category", { required: "Select a Category" })}
                 id="category"
-                defaultValue="">
+                defaultValue=""
+              >
                 <MenuItem value="accommodation">Accommodation</MenuItem>
                 <MenuItem value="attractions">Attractions</MenuItem>
                 <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
@@ -190,7 +192,7 @@ export default function RecommendationForm() {
             <li key={place.uuid}>{place.name}</li>
           ))}
       </ul>
-      {!!suggestionParsed && <GoogleMap places={suggestionParsed} />}
+      {/* {!!suggestionParsed && <GoogleMap places={suggestionParsed} />} */}
       {!!suggestionParsed && <MapCards places={suggestionParsed} />}
     </>
   );

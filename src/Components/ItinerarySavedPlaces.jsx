@@ -36,10 +36,11 @@ const theme = createTheme({
   },
 });
 
-export default function MapCards({ places, uid }) {
+export default function ItinerarySavedPlaces({ places, uid }) {
   //holds information on all places returned from recommendation form
-
-  console.log(places);
+  // const [recommendation, setRecommendation] = useState(places);
+  const recommendation = places;
+  console.log(recommendation);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -47,10 +48,10 @@ export default function MapCards({ places, uid }) {
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
-  //retrieves the specific place recommended --> add to firebase
+  //retrieves the specific recommendation --> add to firebase
   const saveToFavs = (index) => {
-    console.log(places[index]);
-    const place = places[index];
+    console.log(recommendation[index]);
+    const place = recommendation[index];
     const newFavouriteRef = push(favouriteListRef);
     set(newFavouriteRef, {
       name: place.name,
@@ -79,7 +80,7 @@ export default function MapCards({ places, uid }) {
     }
   };
 
-  //deletes specific place using data, which is key
+  //deletes specific recommendation using data, which is key
   const deleteSavedFav = (data) => {
     console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
@@ -165,7 +166,7 @@ export default function MapCards({ places, uid }) {
     <div>
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
-          {places &&
+          {recommendation &&
             places.map((place, index) => (
               <Card key={place.uuid}>
                 <CardHeader title={place.name} />

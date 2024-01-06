@@ -44,7 +44,6 @@ export default function App() {
       <div>
         <RecommendationForm />
         <Itinerary uid={uid} />
-        <MapCards />
       </div>
     </>
   );
