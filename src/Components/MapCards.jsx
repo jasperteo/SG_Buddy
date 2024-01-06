@@ -164,20 +164,18 @@ export default function MapCards({ places, uid }) {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
-          {places &&
-            places.map((place, index) => (
-              <Card key={place.uuid}>
-                <CardHeader title={place.name} />
-                <CardContent>
-                  <p>{place.address}</p>
-                </CardContent>
-                <CardActions>{varyButton(place, index)}</CardActions>
-              </Card>
-            ))}
-          {favPlaces && <h2>Favourites</h2>}
-          {favPlaces && favPlacesListItems(favPlaces)}
-        </LocalizationProvider>
+        {places &&
+          places.map((place, index) => (
+            <Card key={place.uuid}>
+              <CardHeader title={place.name} />
+              <CardContent>
+                <p>{place.address}</p>
+              </CardContent>
+              <CardActions>{varyButton(place, index)}</CardActions>
+            </Card>
+          ))}
+        {favPlaces && <h2>Favourites</h2>}
+        {favPlaces && favPlacesListItems(favPlaces)}
       </ThemeProvider>
     </div>
   );

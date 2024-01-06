@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import GoogleMap from "./GoogleMap";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
@@ -36,11 +37,7 @@ const theme = createTheme({
   },
 });
 
-export default function ItinerarySavedPlaces({ places, uid }) {
-  //holds information on all places returned from recommendation form
-  // const [recommendation, setRecommendation] = useState(places);
-  const recommendation = places;
-  console.log(recommendation);
+export default function ItinerarySavedPlaces({ uid }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -144,42 +141,18 @@ export default function ItinerarySavedPlaces({ places, uid }) {
     }
   };
 
-  //vary button function and color based on if place is included as favourite
-  const varyButton = (place, index) => {
-    const favoritePlace = favPlaces.find(
-      (favPlace) => place.uuid === favPlace.val.uuid
-    );
-    return (
-      <IconButton
-        aria-label="add to favorites"
-        color={favoritePlace ? "primary" : "default"}
-        onClick={() =>
-          favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }
-      >
-        <FavoriteIcon />
-      </IconButton>
-    );
+  //retrieve val, excluding key from places so map component can read data
+  const retrieveVal = () => {
+    return favPlaces.map((obj) => obj.val);
   };
 
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
-          {recommendation &&
-            places.map((place, index) => (
-              <Card key={place.uuid}>
-                <CardHeader title={place.name} />
-                <CardContent>
-                  <p>{place.address}</p>
-                </CardContent>
-                <CardActions>{varyButton(place, index)}</CardActions>
-              </Card>
-            ))}
-          {favPlaces && <h2>Favourites</h2>}
-          {favPlaces && favPlacesListItems(favPlaces)}
-        </LocalizationProvider>
+        {favPlaces && <h2>Favourites</h2>}
+        {favPlaces && favPlacesListItems(favPlaces)}
       </ThemeProvider>
+      {favPlaces && <GoogleMap places={retrieveVal()} />}
     </div>
   );
 }

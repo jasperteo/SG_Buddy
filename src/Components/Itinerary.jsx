@@ -21,6 +21,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { database, storage } from "./FirebaseConfig";
 import { fontSize } from "@mui/system";
+import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
 
 const DB_FLIGHT_KEY = "itinerary/flight";
 const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
@@ -186,7 +187,8 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteFlightData}
             variant="contained"
-            endIcon={<DeleteIcon />}>
+            endIcon={<DeleteIcon />}
+          >
             Delete
           </Button>{" "}
           <Controller
@@ -197,7 +199,8 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}>
+                endIcon={<CloudUploadIcon />}
+              >
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -253,7 +256,8 @@ export default function Itinerary({ uid }) {
           <Button
             onClick={deleteAccommodationData}
             variant="contained"
-            endIcon={<DeleteIcon />}>
+            endIcon={<DeleteIcon />}
+          >
             Delete
           </Button>{" "}
           <Controller
@@ -264,7 +268,8 @@ export default function Itinerary({ uid }) {
               <Button
                 component="label"
                 variant="contained"
-                endIcon={<CloudUploadIcon />}>
+                endIcon={<CloudUploadIcon />}
+              >
                 Upload file
                 <input
                   style={{ display: "none" }}
@@ -290,10 +295,12 @@ export default function Itinerary({ uid }) {
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
-          rel="noreferrer">
+          rel="noreferrer"
+        >
           <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
         </a>
       </div>
+      <ItinerarySavedPlaces />
     </>
   );
 }

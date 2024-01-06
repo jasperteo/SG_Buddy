@@ -192,7 +192,7 @@ export default function RecommendationForm() {
             <li key={place.uuid}>{place.name}</li>
           ))}
       </ul>
-      {/* {!!suggestionParsed && <GoogleMap places={suggestionParsed} />} */}
+      {!!suggestionParsed && <GoogleMap places={suggestionParsed} />}
       {!!suggestionParsed && <MapCards places={suggestionParsed} />}
     </>
   );
