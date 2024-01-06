@@ -2,6 +2,9 @@ import { Button, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import {
   onChildAdded,
   onChildChanged,
@@ -30,6 +33,7 @@ export default function FlightForm({ uid }) {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm();
 
   const flightRef = databaseRef(database, `${uid}/${DB_FLIGHT_KEY}`);
@@ -48,7 +52,9 @@ export default function FlightForm({ uid }) {
     }
     set(flightRef, {
       departingAirport: data.departingAirport,
+      departureDateTime: data.departureDateTime.$d.toLocaleString(),
       arrivingAirport: data.arrivingAirport,
+      arrivalDateTime: data.arrivalDateTime.$d.toLocaleString(),
       flight: data.flight,
       flightFileURL: url,
       flightFileName: name,
@@ -91,11 +97,39 @@ export default function FlightForm({ uid }) {
                 label="From"
                 variant="filled"
                 error={!!errors.departingAirport}
-                helperText={errors?.departingAirport?.message}
               />
             )}
           />
         </div>
+        <br />
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Controller
+              name="departureDateTime"
+              control={control}
+              defaultValue={null}
+              rules={{ required: "Enter Departure Date and Time" }}
+              render={({ field }) => (
+                <DateTimePicker
+                  {...field}
+                  disablePast
+                  label="Departure Date & Time"
+                  format={"DD/MM/YYYY hh:mm a"}
+                  value={field.value}
+                  onChange={(newValue) =>
+                    setValue("departureDateTime", newValue)
+                  }
+                  slotProps={{
+                    textField: {
+                      helperText: errors?.departureDateTime?.message,
+                    },
+                  }}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+        <br />
         <div>
           <Controller
             name="arrivingAirport"
@@ -114,6 +148,33 @@ export default function FlightForm({ uid }) {
             )}
           />
         </div>
+        <br />
+        <div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Controller
+              name="arrivalDateTime"
+              control={control}
+              defaultValue={null}
+              rules={{ required: "Enter Arrival Date and Time" }}
+              render={({ field }) => (
+                <DateTimePicker
+                  {...field}
+                  disablePast
+                  label="Arrival Date & Time"
+                  format={"DD/MM/YYYY hh:mm a"}
+                  value={field.value}
+                  onChange={(newValue) => setValue("arrivalDateTime", newValue)}
+                  slotProps={{
+                    textField: {
+                      helperText: errors?.arrivalDateTime?.message,
+                    },
+                  }}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+        <br />
         <div>
           <Controller
             name="flight"
@@ -163,8 +224,12 @@ export default function FlightForm({ uid }) {
         </p>
       </form>
       <div>
-        <p>Departing: {flight.departingAirport}</p>
-        <p>Arriving: {flight.arrivingAirport}</p>
+        <p>
+          Departing: {flight.departingAirport}, {flight.departureDateTime}
+        </p>
+        <p>
+          Arriving: {flight.arrivingAirport}, {flight.arrivalDateTime}
+        </p>
         <p>Flight: {flight.flight}</p>
         <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
           <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
