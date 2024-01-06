@@ -20,8 +20,9 @@ import {
   getDatabase,
 } from "firebase/database";
 import { database, storage } from "../Components/FirebaseConfig";
-import Planner from "./Planner";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/en-gb";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
@@ -38,6 +39,7 @@ const theme = createTheme({
 export default function MapCards({ places, uid }) {
   //holds information on all places returned from recommendation form
   const [recommendation, setRecommendation] = useState(places);
+  console.log(recommendation);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -61,31 +63,20 @@ export default function MapCards({ places, uid }) {
 
   //save date const
   const addDate = (date, place) => {
-    // const date = e.toDateString();
     console.log(date.$d);
-
     console.log(place.key);
-    const db = getDatabase();
-    update(ref(db, `/${uid}/favourites/${place.key}`), {
-      name: place.val.name,
-      address: place.val.address,
-      lat: place.val.lat,
-      lng: place.val.lng,
-      uuid: place.val.uuid,
-      date: date.$d,
-    });
 
-    // const updates = {};
-    // updates[place.key] = {
-    //   name: place.val.name,
-    //   address: place.val.address,
-    //   lat: place.val.lat,
-    //   lng: place.val.lng,
-    //   uuid: place.val.uuid,
-    //   date: e,
-    // };
-
-    // update(favouriteListRef, updates);
+    if (date.$d) {
+      const db = getDatabase();
+      update(ref(db, `/${uid}/favourites/${place.key}`), {
+        name: place.val.name,
+        address: place.val.address,
+        lat: place.val.lat,
+        lng: place.val.lng,
+        uuid: place.val.uuid,
+        date: date.$d,
+      });
+    }
   };
 
   //deletes specific recommendation using data, which is key
@@ -93,6 +84,15 @@ export default function MapCards({ places, uid }) {
     console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
+
+  //sorts array of objects based on date property
+  const sortedArray = [...favPlaces].sort((a, b) => {
+    //convert strings back to date
+    const dateA = a.val.date ? new Date(a.val.date) : new Date("9999-12-31"); // Use a max date value for objects without dates
+    const dateB = b.val.date ? new Date(b.val.date) : new Date("9999-12-31");
+
+    return dateA - dateB;
+  });
 
   useEffect(() => {
     // onChildAdded will return data for every child at the reference and every subsequent new child
@@ -130,8 +130,9 @@ export default function MapCards({ places, uid }) {
             </IconButton>
 
             <DatePicker
-              inputFormat="dd/MM/yyyy"
-              label="Basic date picker"
+              inputFormat={"dd/MM/yyyy"}
+              label={place.val.date ? "Date" : "Choose a date"}
+              defaultValue={place.val.date && dayjs(place.val.date)}
               disablePast
               views={["year", "month", "day"]}
               onChange={(e) => addDate(e, place)}
@@ -163,19 +164,19 @@ export default function MapCards({ places, uid }) {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          {places.map((place, index) => (
-            <Card key={place.uuid}>
-              <CardHeader title={place.name} />
-              <CardContent>
-                <p>{place.address}</p>
-              </CardContent>
-              <CardActions>{varyButton(place, index)}</CardActions>
-            </Card>
-          ))}
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+          {places &&
+            places.map((place, index) => (
+              <Card key={place.uuid}>
+                <CardHeader title={place.name} />
+                <CardContent>
+                  <p>{place.address}</p>
+                </CardContent>
+                <CardActions>{varyButton(place, index)}</CardActions>
+              </Card>
+            ))}
           {favPlaces && <h2>Favourites</h2>}
           {favPlaces && favPlacesListItems(favPlaces)}
-          {/* {favPlaces && <Planner places={favPlaces} uid={loginID} />} */}
         </LocalizationProvider>
       </ThemeProvider>
     </div>
