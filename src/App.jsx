@@ -11,6 +11,12 @@ import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import BottomNavBar from "./Components/BottomNavBar";
+import {
+  Navigate,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 export default function App() {
   //check login status
@@ -33,6 +39,45 @@ export default function App() {
     });
   }, []);
 
+  //controls signout
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      setIsLoggedIn(false);
+      setUser({});
+    });
+  };
+
+  //controls path
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <div>
+          <LoginForm isLoggedIn={isLoggedIn} email={email} uid={uid} />
+          <BottomNavBar isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
+        </div>
+      ),
+    },
+    {
+      path: "/explore-recommendations",
+      element: (
+        <div>
+          <RecommendationForm />
+          <BottomNavBar isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
+        </div>
+      ),
+    },
+    {
+      path: "/itinerary",
+      element: (
+        <div>
+          <Itinerary uid={uid} />
+          <BottomNavBar isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
+        </div>
+      ),
+    },
+  ]);
+
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
@@ -43,13 +88,8 @@ export default function App() {
           alt="passport"
         />
         <h1>RA Project 2</h1>
-        <div>
-          <LoginForm isLoggedIn={isLoggedIn} email={email} uid={uid} />
-        </div>
-        <div>
-          <RecommendationForm />
-          <Itinerary uid={uid} />
-        </div>
+        <div></div>
+        <RouterProvider router={router} />
       </LocalizationProvider>
     </>
   );

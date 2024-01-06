@@ -4,7 +4,7 @@ import {
   InfoWindow,
   AdvancedMarker,
 } from "@vis.gl/react-google-maps";
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 
 export default function GoogleMap({ places }) {
   //key for google maps api
