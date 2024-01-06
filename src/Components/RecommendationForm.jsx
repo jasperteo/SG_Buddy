@@ -14,6 +14,9 @@ import useSWR from "swr";
 import { useState } from "react";
 import GoogleMap from "./GoogleMap";
 import MapCards from "./MapCards";
+import { set } from "firebase/database";
+
+const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
 export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -21,9 +24,14 @@ export default function RecommendationForm() {
   const [dataset, setDataset] = useState("");
   const [radius, setRadius] = useState(0);
 
-  const API_KEY = import.meta.env.VITE_TIH_API_KEY;
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
-  const fetcher = async (apiURL) => {
+  const suggestionsFetcher = async (apiURL) => {
     const response = await axios.get(apiURL, {
       headers: {
         "Content-Type": "application/json",
@@ -42,18 +50,22 @@ export default function RecommendationForm() {
     formSubmitted
       ? `https://api.stb.gov.sg/services/navigation/v2/search?location=${location}&dataset=${dataset}&radius=${radius}`
       : null,
-    fetcher
+    suggestionsFetcher
   );
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
+  const locationFetch = () => {
+    if (navigator.geolocation) {
+      const success = (position) =>
+        setLocation(
+          `${position.coords.latitude}%2C${position.coords.longitude}`
+        );
+      const error = () => setLocation("1.288540%2C103.849297");
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else setLocation("1.288540%2C103.849297");
+  };
 
   const onSubmit = (data) => {
-    setLocation(`${data.firstItem}%2C${data.secondItem}`);
+    locationFetch();
     setDataset(data.category);
     setRadius(data.radius);
     setFormSubmitted(true);
@@ -89,86 +101,54 @@ export default function RecommendationForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Controller
-            name="firstItem"
+            name="radius"
             control={control}
-            defaultValue="1.255694"
+            defaultValue="1000"
+            rules={{
+              required: "Enter a radius",
+              max: { value: 42000, message: "Maximum radius of 42km" },
+              pattern: {
+                value: /^[0-9]*$/,
+                message: "Please enter only numbers.",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
-                id="firstItem"
-                label="First Item"
+                id="filled-basic"
+                label="Radius (in metres)"
                 variant="filled"
-              />
-            )}
-          />{" "}
-          <Controller
-            name="secondItem"
-            control={control}
-            defaultValue="103.81985"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="secondItem"
-                label="Second Item"
-                variant="filled"
+                error={!!errors.radius}
+                helperText={errors?.radius?.message}
               />
             )}
           />
         </div>
-        <br />
-        <>
-          <div>
-            <Controller
-              name="radius"
-              control={control}
-              defaultValue="1000"
-              rules={{
-                required: "Enter a radius",
-                max: { value: 42000, message: "Maximum radius of 42km" },
-                pattern: {
-                  value: /^[0-9]*$/,
-                  message: "Please enter only numbers.",
-                },
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  id="filled-basic"
-                  label="Radius (in metres)"
-                  variant="filled"
-                  error={!!errors.radius}
-                  helperText={errors?.radius?.message}
-                />
-              )}
-            />
-          </div>
-          <div>
-            <FormControl
-              variant="filled"
-              sx={{ m: 1, minWidth: 220 }}
-              error={!!errors.category}
-            >
-              <InputLabel>Category</InputLabel>
-              <Select
-                {...register("category", { required: "Select a Category" })}
-                id="category"
-                defaultValue=""
-              >
-                <MenuItem value="accommodation">Accommodation</MenuItem>
-                <MenuItem value="attractions">Attractions</MenuItem>
-                <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
-                <MenuItem value="cruises">Cruises</MenuItem>
-                <MenuItem value="events">Events</MenuItem>
-                <MenuItem value="food_beverages">Food & Beverages</MenuItem>
-                <MenuItem value="precincts">Precincts</MenuItem>
-                <MenuItem value="shops">Shops</MenuItem>
-                <MenuItem value="tours">Tours</MenuItem>
-                <MenuItem value="venues">Venues</MenuItem>
-              </Select>
-              <FormHelperText>{errors?.category?.message}</FormHelperText>
-            </FormControl>
-          </div>
-        </>
+        <div>
+          <FormControl
+            variant="filled"
+            sx={{ m: 1, minWidth: 220 }}
+            error={!!errors.category}>
+            <InputLabel>Category</InputLabel>
+            <Select
+              {...register("category", { required: "Select a Category" })}
+              id="category"
+              defaultValue="">
+              <MenuItem value="accommodation">Accommodation</MenuItem>
+              <MenuItem value="attractions">Attractions</MenuItem>
+              <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
+              <MenuItem value="cruises">Cruises</MenuItem>
+              <MenuItem value="events">Events</MenuItem>
+              <MenuItem value="food_beverages">Food & Beverages</MenuItem>
+              <MenuItem value="precincts">Precincts</MenuItem>
+              <MenuItem value="shops">Shops</MenuItem>
+              <MenuItem value="tours">Tours</MenuItem>
+              <MenuItem value="venues">Venues</MenuItem>
+            </Select>
+            <FormHelperText>{errors?.category?.message}</FormHelperText>
+          </FormControl>
+        </div>
+
         <p>
           <Button type="submit" variant="contained" endIcon={<SendIcon />}>
             Send
