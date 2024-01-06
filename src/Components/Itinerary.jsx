@@ -9,7 +9,7 @@ export default function Itinerary({ uid }) {
       <br />
       <AccommodationForm uid={uid} />
       <br />
-      <ItinerarySavedPlaces />
+      <ItinerarySavedPlaces uid={uid} />
     </>
   );
 }
