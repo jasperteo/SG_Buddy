@@ -59,7 +59,7 @@ export default function RecommendationForm() {
     setFormSubmitted(true);
   };
 
-  const suggestionParsed = suggestionsRaw?.data.map((suggestion, index) => {
+  const places = suggestionsRaw?.data.map((suggestion, index) => {
     return {
       name: suggestion.name,
       uuid: suggestion.uuid,
@@ -185,13 +185,11 @@ export default function RecommendationForm() {
       )}
       {suggestionError?.message}
       <ul>
-        {suggestionParsed &&
-          suggestionParsed.map((place) => (
-            <li key={place.uuid}>{place.name}</li>
-          ))}
+        {places &&
+          places.map((place) => <li key={place.uuid}>{place.name}</li>)}
       </ul>
-      {!!suggestionParsed && <GoogleMap places={suggestionParsed} />}
-      {!!suggestionParsed && <MapCards places={suggestionParsed} />}
+      {!!places && <GoogleMap places={places} />}
+      {!!places && <MapCards places={places} />}
     </>
   );
 }
