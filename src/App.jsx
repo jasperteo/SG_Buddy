@@ -7,6 +7,10 @@ import Itinerary from "./Components/Itinerary";
 import LoginForm from "./Components/LogInForm";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./Components/FirebaseConfig";
+import dayjs from "dayjs";
+import "dayjs/locale/en-gb";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function App() {
   //check login status
@@ -31,21 +35,22 @@ export default function App() {
 
   return (
     <>
-      <img
-        width="200"
-        height="200"
-        src="https://img.icons8.com/clouds/400/passport.png"
-        alt="passport"
-      />
-      <h1>RA Project 2</h1>
-      <div>
-        <LoginForm isLoggedIn={isLoggedIn} email={email} uid={uid} />
-      </div>
-      <div>
-        <RecommendationForm />
-        <Itinerary uid={uid} />
-        <MapCards />
-      </div>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+        <img
+          width="200"
+          height="200"
+          src="https://img.icons8.com/clouds/400/passport.png"
+          alt="passport"
+        />
+        <h1>RA Project 2</h1>
+        <div>
+          <LoginForm isLoggedIn={isLoggedIn} email={email} uid={uid} />
+        </div>
+        <div>
+          <RecommendationForm />
+          <Itinerary uid={uid} />
+        </div>
+      </LocalizationProvider>
     </>
   );
 }

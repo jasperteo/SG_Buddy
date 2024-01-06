@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import GoogleMap from "./GoogleMap";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
@@ -36,10 +37,7 @@ const theme = createTheme({
   },
 });
 
-export default function MapCards({ places, uid }) {
-  //holds information on all places returned from recommendation form
-
-  console.log(places);
+export default function ItinerarySavedPlaces({ uid }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -47,10 +45,10 @@ export default function MapCards({ places, uid }) {
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
-  //retrieves the specific place recommended --> add to firebase
+  //retrieves the specific recommendation --> add to firebase
   const saveToFavs = (index) => {
-    console.log(places[index]);
-    const place = places[index];
+    console.log(recommendation[index]);
+    const place = recommendation[index];
     const newFavouriteRef = push(favouriteListRef);
     set(newFavouriteRef, {
       name: place.name,
@@ -79,7 +77,7 @@ export default function MapCards({ places, uid }) {
     }
   };
 
-  //deletes specific place using data, which is key
+  //deletes specific recommendation using data, which is key
   const deleteSavedFav = (data) => {
     console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
@@ -143,40 +141,18 @@ export default function MapCards({ places, uid }) {
     }
   };
 
-  //vary button function and color based on if place is included as favourite
-  const varyButton = (place, index) => {
-    const favoritePlace = favPlaces.find(
-      (favPlace) => place.uuid === favPlace.val.uuid
-    );
-    return (
-      <IconButton
-        aria-label="add to favorites"
-        color={favoritePlace ? "primary" : "default"}
-        onClick={() =>
-          favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }
-      >
-        <FavoriteIcon />
-      </IconButton>
-    );
+  //retrieve val, excluding key from places so map component can read data
+  const retrieveVal = () => {
+    return favPlaces.map((obj) => obj.val);
   };
 
   return (
     <div>
       <ThemeProvider theme={theme}>
-        {places &&
-          places.map((place, index) => (
-            <Card key={place.uuid}>
-              <CardHeader title={place.name} />
-              <CardContent>
-                <p>{place.address}</p>
-              </CardContent>
-              <CardActions>{varyButton(place, index)}</CardActions>
-            </Card>
-          ))}
         {favPlaces && <h2>Favourites</h2>}
         {favPlaces && favPlacesListItems(favPlaces)}
       </ThemeProvider>
+      {favPlaces && <GoogleMap places={retrieveVal()} />}
     </div>
   );
 }
