@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { Button, TextField } from "@mui/material/";
+import { Button, ButtonGroup, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import { auth } from "./FirebaseConfig";
 import {
@@ -107,20 +107,22 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
               />
             </div>
             <p>
-              <Button
-                onClick={handleSubmit(logIn)}
-                type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}>
-                Log In
-              </Button>{" "}
-              <Button
-                onClick={handleSubmit(signUp)}
-                type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}>
-                Sign Up
-              </Button>
+              <ButtonGroup variant="contained">
+                <Button
+                  onClick={handleSubmit(logIn)}
+                  type="submit"
+                  variant="contained"
+                  endIcon={<SendIcon />}>
+                  Log In
+                </Button>{" "}
+                <Button
+                  onClick={handleSubmit(signUp)}
+                  type="submit"
+                  variant="contained"
+                  endIcon={<SendIcon />}>
+                  Sign Up
+                </Button>
+              </ButtonGroup>
             </p>
           </>
         )}
