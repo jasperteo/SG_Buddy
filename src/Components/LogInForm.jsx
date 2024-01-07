@@ -52,7 +52,17 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
   return (
     <>
       <form>
-        {isLoggedIn ? null : (
+        {isLoggedIn ? (
+          <p>
+            <Button
+              onClick={logOut}
+              type="submit"
+              variant="contained"
+              endIcon={<SendIcon />}>
+              Log Out
+            </Button>
+          </p>
+        ) : (
           <>
             <div>
               <Controller
@@ -96,21 +106,7 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                 )}
               />
             </div>
-          </>
-        )}
-        <p>
-          {isLoggedIn ? (
-            <>
-              <Button
-                onClick={logOut}
-                type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}>
-                Log Out
-              </Button>
-            </>
-          ) : (
-            <>
+            <p>
               <Button
                 onClick={handleSubmit(logIn)}
                 type="submit"
@@ -125,9 +121,9 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                 endIcon={<SendIcon />}>
                 Sign Up
               </Button>
-            </>
-          )}
-        </p>
+            </p>
+          </>
+        )}
       </form>
       {!!email && <p>Welcome! {email}</p>}
       {!!uid && <p>Your UID: {uid}</p>}
