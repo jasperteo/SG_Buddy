@@ -44,20 +44,6 @@ export default function ItinerarySavedPlaces({ uid }) {
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
-  //retrieves the specific recommendation --> add to firebase
-  const saveToFavs = (index) => {
-    console.log(recommendation[index]);
-    const place = recommendation[index];
-    const newFavouriteRef = push(favouriteListRef);
-    set(newFavouriteRef, {
-      name: place.name,
-      address: place.address,
-      lat: place.lat,
-      lng: place.lng,
-      uuid: place.uuid,
-    });
-  };
-
   //save date const
   const addDate = (date, place) => {
     console.log(date.$d);
@@ -83,28 +69,41 @@ export default function ItinerarySavedPlaces({ uid }) {
   };
 
   //sorts array of objects based on date property
-  // const sortedArray = [...favPlaces].sort((a, b) => {
-  //   //convert strings back to date
-  //   const dateA = a.val.date ? new Date(a.val.date) : new Date("9999-12-31"); // Use a max date value for objects without dates
-  //   const dateB = b.val.date ? new Date(b.val.date) : new Date("9999-12-31");
+  const sortedArray = favPlaces.sort((a, b) => {
+    //convert strings back to date
+    const dateA = a.val.date
+      ? Date.parse(new Date(a.val.date))
+      : Date.parse(new Date("9999-12-31"));
+    const dateB = b.val.date
+      ? Date.parse(new Date(b.val.date))
+      : Date.parse(new Date("9999-12-31"));
 
-  //   return dateA - dateB;
-  // });
+    return dateA - dateB;
+  });
 
   useEffect(() => {
     // onChildAdded will return data for every child at the reference and every subsequent new child
-    onChildAdded(favouriteListRef, (data) =>
-      setFavPlaces((prev) => [...prev, { key: data.key, val: data.val() }])
+    onChildAdded(
+      favouriteListRef,
+      (data) =>
+        setFavPlaces((prev) => [...prev, { key: data.key, val: data.val() }]),
+      setFavPlaces(sortedArray)
     );
-    onChildRemoved(favouriteListRef, (data) =>
-      setFavPlaces((prev) => prev.filter((item) => item.key !== data.key))
+    onChildRemoved(
+      favouriteListRef,
+      (data) =>
+        setFavPlaces((prev) => prev.filter((item) => item.key !== data.key)),
+      setFavPlaces(sortedArray)
     );
-    onChildChanged(favouriteListRef, (data) =>
-      setFavPlaces((prev) =>
-        prev.map((item) =>
-          item.key === data.key ? { key: data.key, val: data.val() } : item
-        )
-      )
+    onChildChanged(
+      favouriteListRef,
+      (data) =>
+        setFavPlaces((prev) =>
+          prev.map((item) =>
+            item.key === data.key ? { key: data.key, val: data.val() } : item
+          )
+        ),
+      setFavPlaces(sortedArray)
     );
     return () => off(favouriteListRef);
   }, [uid]);

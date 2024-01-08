@@ -88,7 +88,7 @@ export default function App() {
           alt="passport"
         />
         <h1>RA Project 2</h1>
-        <div></div>
+
         <RouterProvider router={router} />
       </LocalizationProvider>
     </>
