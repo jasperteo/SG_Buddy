@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.flight-detail {
+  font-family: "IBM Plex Sans Var";
+  font-size: 2em;
+  font-weight: 600;
+  margin: 0.5em;
+}
+
+.flight-time {
+  font-family: "IBM Plex Mono";
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.accommodation {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 0.5em;
+}

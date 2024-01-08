@@ -129,15 +129,13 @@ export default function RecommendationForm({ uid }) {
           <FormControl
             variant="filled"
             sx={{ m: 1, minWidth: 220 }}
-            error={!!errors.category}
-          >
+            error={!!errors.category}>
             <InputLabel>Category</InputLabel>
             <Select
               {...register("category", { required: "Select a Category" })}
               id="category"
               defaultValue={[]}
-              multiple
-            >
+              multiple>
               <MenuItem value="accommodation">Accommodation</MenuItem>
               <MenuItem value="attractions">Attractions</MenuItem>
               <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
@@ -152,9 +150,12 @@ export default function RecommendationForm({ uid }) {
             <FormHelperText>{errors?.category?.message}</FormHelperText>
           </FormControl>
         </div>
-
         <p>
-          <Button type="submit" variant="contained" endIcon={<SendIcon />}>
+          <Button
+            sx={{ bgcolor: "#4D6D9A", fontFamily: "IBM Plex Sans Var" }}
+            type="submit"
+            variant="contained"
+            endIcon={<iconify-icon icon="carbon:send" />}>
             Send
           </Button>
         </p>

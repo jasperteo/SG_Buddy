@@ -7,8 +7,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
 import {
   onChildAdded,
   onChildChanged,
@@ -92,20 +90,23 @@ export default function AccommodationForm({ uid }) {
     return (
       <>
         <Button
+          sx={{ bgcolor: "#4D6D9A", fontFamily: "IBM Plex Sans Var" }}
           variant="contained"
           onClick={() => setOpen(true)}
-          endIcon={<iconify-icon icon="ic:twotone-hotel" />}>
+          endIcon={<iconify-icon icon="carbon:hotel" />}>
           Enter Accommodation Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Accommodation Details</DialogTitle>
-          <DialogContent>
+          <DialogTitle sx={{ bgcolor: "#FFDDE6" }}>
+            Accommodation Details
+          </DialogTitle>
+          <DialogContent sx={{ bgcolor: "#FFDDE6" }}>
             <form onSubmit={handleSubmit(writeAccommodationData)}>
               <div>
                 <Controller
                   name="accommodation"
                   control={control}
-                  defaultValue="Hilton Singapore Orchard"
+                  defaultValue=""
                   rules={{ required: "Enter Accommodation" }}
                   render={({ field }) => (
                     <TextField
@@ -123,7 +124,7 @@ export default function AccommodationForm({ uid }) {
                 <Controller
                   name="address"
                   control={control}
-                  defaultValue="333 Orchard Rd, Singapore 238867"
+                  defaultValue=""
                   rules={{ required: "Enter Address" }}
                   render={({ field }) => (
                     <TextField
@@ -158,11 +159,14 @@ export default function AccommodationForm({ uid }) {
               </p>
             </form>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <DialogActions sx={{ bgcolor: "#FFDDE6" }}>
+            <Button onClick={() => setOpen(false)} sx={{ color: "#5F6366" }}>
+              Cancel
+            </Button>
             <Button
               onClick={handleSubmit(writeAccommodationData)}
-              endIcon={<SendIcon />}>
+              endIcon={<iconify-icon icon="carbon:send" />}
+              sx={{ color: "#5F6366" }}>
               Submit
             </Button>
           </DialogActions>
@@ -173,10 +177,13 @@ export default function AccommodationForm({ uid }) {
 
   return (
     <>
+      <div className="accommodation">
+        {accommodation?.accommodation}
+        <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
+          {accommodation?.address}
+        </div>
+      </div>
       <div>
-        <AccommodationFormDialog />
-        <p>Accommodation: {accommodation?.accommodation}</p>
-        <p>Address: {accommodation?.address}</p>
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
@@ -186,9 +193,10 @@ export default function AccommodationForm({ uid }) {
           </IconButton>
         </a>
         <IconButton onClick={deleteAccommodationData}>
-          <DeleteIcon />
+          <iconify-icon icon="carbon:trash-can" />
         </IconButton>
       </div>
+      <AccommodationFormDialog />
     </>
   );
 }
