@@ -1,7 +1,14 @@
-import { Button, ButtonGroup, TextField } from "@mui/material/";
+import {
+  Button,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   onChildAdded,
   onChildChanged,
@@ -80,80 +87,107 @@ export default function AccommodationForm({ uid }) {
     return () => off(accommodationRef);
   }, [uid]);
 
+  const AccommodationFormDialog = () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+          endIcon={<iconify-icon icon="ic:twotone-hotel" />}>
+          Enter Accommodation Details
+        </Button>
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>Accommodation Details</DialogTitle>
+          <DialogContent>
+            <form onSubmit={handleSubmit(writeAccommodationData)}>
+              <div>
+                <Controller
+                  name="accommodation"
+                  control={control}
+                  defaultValue="Hilton Singapore Orchard"
+                  rules={{ required: "Enter Accommodation" }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="accommodation"
+                      label="Staying at"
+                      variant="filled"
+                      error={!!errors.accommodation}
+                      helperText={errors?.accommodation?.message}
+                    />
+                  )}
+                />
+              </div>
+              <div>
+                <Controller
+                  name="address"
+                  control={control}
+                  defaultValue="333 Orchard Rd, Singapore 238867"
+                  rules={{ required: "Enter Address" }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="address"
+                      label="Address"
+                      variant="filled"
+                      error={!!errors.address}
+                      helperText={errors?.address?.message}
+                    />
+                  )}
+                />
+              </div>
+              <p>
+                <Controller
+                  name="accommodationFile"
+                  control={control}
+                  defaultValue={null}
+                  render={({ field }) => (
+                    <Button
+                      component="label"
+                      endIcon={<iconify-icon icon="ic:twotone-upload-file" />}>
+                      Upload Booking
+                      <input
+                        style={{ display: "none" }}
+                        type="file"
+                        onChange={(e) => field.onChange(e.target.files[0])}
+                      />
+                    </Button>
+                  )}
+                />
+              </p>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button
+              onClick={handleSubmit(writeAccommodationData)}
+              endIcon={<SendIcon />}>
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit(writeAccommodationData)}>
-        <div>
-          <Controller
-            name="accommodation"
-            control={control}
-            defaultValue="Hilton Singapore Orchard"
-            rules={{ required: "Enter Accommodation" }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="accommodation"
-                label="Staying at"
-                variant="filled"
-                error={!!errors.accommodation}
-                helperText={errors?.accommodation?.message}
-              />
-            )}
-          />
-        </div>
-        <div>
-          <Controller
-            name="address"
-            control={control}
-            defaultValue="333 Orchard Rd, Singapore 238867"
-            rules={{ required: "Enter Address" }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="address"
-                label="Address"
-                variant="filled"
-                error={!!errors.address}
-                helperText={errors?.address?.message}
-              />
-            )}
-          />
-        </div>
-        <p>
-          <ButtonGroup variant="contained">
-            <Button type="submit" endIcon={<SendIcon />}>
-              Send
-            </Button>
-            <Button onClick={deleteAccommodationData} endIcon={<DeleteIcon />}>
-              Delete
-            </Button>
-            <Controller
-              name="accommodationFile"
-              control={control}
-              defaultValue={null}
-              render={({ field }) => (
-                <Button component="label" endIcon={<CloudUploadIcon />}>
-                  Upload file
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    onChange={(e) => field.onChange(e.target.files[0])}
-                  />
-                </Button>
-              )}
-            />
-          </ButtonGroup>
-        </p>
-      </form>
       <div>
+        <AccommodationFormDialog />
         <p>Accommodation: {accommodation?.accommodation}</p>
         <p>Address: {accommodation?.address}</p>
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
           rel="noreferrer">
-          <iconify-icon style={{ fontSize: "1.5em" }} icon="mdi:attachment" />
+          <IconButton>
+            <iconify-icon inline icon="carbon:attachment" />
+          </IconButton>
         </a>
+        <IconButton onClick={deleteAccommodationData}>
+          <DeleteIcon />
+        </IconButton>
       </div>
     </>
   );
