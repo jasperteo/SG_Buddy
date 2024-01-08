@@ -17,7 +17,6 @@ import {
   remove,
   update,
   off,
-  getDatabase,
 } from "firebase/database";
 import { database } from "../Components/FirebaseConfig";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -48,10 +47,8 @@ export default function ItinerarySavedPlaces({ uid }) {
   const addDate = (date, place) => {
     console.log(date.$d);
     console.log(place.key);
-
     if (date.$d) {
-      const db = getDatabase();
-      update(ref(db, `/${uid}/favourites/${place.key}`), {
+      update(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${place.key}`), {
         name: place.val.name,
         address: place.val.address,
         lat: place.val.lat,
@@ -120,11 +117,9 @@ export default function ItinerarySavedPlaces({ uid }) {
             <IconButton
               aria-label="add to favorites"
               color="primary"
-              onClick={() => deleteSavedFav(favPlaces[index].key)}
-            >
+              onClick={() => deleteSavedFav(favPlaces[index].key)}>
               <FavoriteIcon />
             </IconButton>
-
             <DatePicker
               inputFormat={"dd/MM/yyyy"}
               label={place.val.date ? "Date" : "Choose a date"}
