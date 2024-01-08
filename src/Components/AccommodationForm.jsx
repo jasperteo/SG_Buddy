@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material/";
+import { Button, ButtonGroup, TextField } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -120,33 +120,29 @@ export default function AccommodationForm({ uid }) {
           />
         </div>
         <p>
-          <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-            Send
-          </Button>{" "}
-          <Button
-            onClick={deleteAccommodationData}
-            variant="contained"
-            endIcon={<DeleteIcon />}>
-            Delete
-          </Button>{" "}
-          <Controller
-            name="accommodationFile"
-            control={control}
-            defaultValue={null}
-            render={({ field }) => (
-              <Button
-                component="label"
-                variant="contained"
-                endIcon={<CloudUploadIcon />}>
-                Upload file
-                <input
-                  style={{ display: "none" }}
-                  type="file"
-                  onChange={(e) => field.onChange(e.target.files[0])}
-                />
-              </Button>
-            )}
-          />
+          <ButtonGroup variant="contained">
+            <Button type="submit" endIcon={<SendIcon />}>
+              Send
+            </Button>
+            <Button onClick={deleteAccommodationData} endIcon={<DeleteIcon />}>
+              Delete
+            </Button>
+            <Controller
+              name="accommodationFile"
+              control={control}
+              defaultValue={null}
+              render={({ field }) => (
+                <Button component="label" endIcon={<CloudUploadIcon />}>
+                  Upload file
+                  <input
+                    style={{ display: "none" }}
+                    type="file"
+                    onChange={(e) => field.onChange(e.target.files[0])}
+                  />
+                </Button>
+              )}
+            />
+          </ButtonGroup>
         </p>
       </form>
       <div>
