@@ -1,6 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
 import { Button, ButtonGroup, TextField } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
 import { auth } from "./FirebaseConfig";
 import {
   createUserWithEmailAndPassword,
@@ -54,11 +53,11 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
       <form>
         {isLoggedIn ? (
           <Button
+            sx={{ bgcolor: "#4D6D9A", fontFamily: "IBM Plex Sans Var" }}
             onClick={logOut}
             type="submit"
             variant="contained"
-            endIcon={<SendIcon />}
-          >
+            endIcon={<iconify-icon icon="carbon:logout" />}>
             Log Out
           </Button>
         ) : (
@@ -105,22 +104,28 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                 )}
               />
             </div>
-
-            <ButtonGroup variant="contained">
+            <br />
+            <ButtonGroup variant="contained" color="grey">
               <Button
+                sx={{
+                  color: "#FFF",
+                  bgcolor: "#4D6D9A",
+                  fontFamily: "IBM Plex Sans Var",
+                }}
                 onClick={handleSubmit(logIn)}
                 type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}
-              >
+                endIcon={<iconify-icon icon="carbon:login" />}>
                 Log In
               </Button>{" "}
               <Button
+                sx={{
+                  color: "#FFF",
+                  bgcolor: "#4D6D9A",
+                  fontFamily: "IBM Plex Sans Var",
+                }}
                 onClick={handleSubmit(signUp)}
                 type="submit"
-                variant="contained"
-                endIcon={<SendIcon />}
-              >
+                endIcon={<iconify-icon icon="carbon:up-to-top" />}>
                 Sign Up
               </Button>
             </ButtonGroup>

@@ -1,14 +1,14 @@
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import LogoutIcon from "@mui/icons-material/Logout";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Box from "@mui/material/Box";
 import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
 
 export default function BottomNavBar({ isLoggedIn }) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(2);
   return (
     <div>
       {isLoggedIn && (
@@ -46,8 +46,8 @@ export default function BottomNavBar({ isLoggedIn }) {
               sx={{ "*": { color: value === 2 ? "#F78888" : "#90CCF4" } }}
               component={RouterLink}
               to="/"
-              label="Log out"
-              icon={<LogoutIcon />}
+              label="Account"
+              icon={<AccountCircleIcon />}
             />
           </BottomNavigation>
         </Box>

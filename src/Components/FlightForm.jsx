@@ -91,10 +91,10 @@ export default function FlightForm({ uid }) {
     return (
       <>
         <Button
-          sx={{ bgcolor: "#4D6D9A" }}
+          sx={{ bgcolor: "#4D6D9A", fontFamily: "IBM Plex Sans Var" }}
           variant="contained"
           onClick={() => setOpen(true)}
-          endIcon={<iconify-icon icon="ic:twotone-flight" />}>
+          endIcon={<iconify-icon icon="carbon:plane" />}>
           Enter Flight Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -105,7 +105,7 @@ export default function FlightForm({ uid }) {
                 <Controller
                   name="departingAirport"
                   control={control}
-                  defaultValue="JFK (John F. Kennedy International Airport)"
+                  defaultValue=""
                   rules={{ required: "Enter Departing Airport" }}
                   render={({ field }) => (
                     <TextField
@@ -151,7 +151,7 @@ export default function FlightForm({ uid }) {
                 <Controller
                   name="arrivingAirport"
                   control={control}
-                  defaultValue="SIN (Changi Airport)"
+                  defaultValue=""
                   rules={{ required: "Enter Arriving Airport" }}
                   render={({ field }) => (
                     <TextField
@@ -198,7 +198,7 @@ export default function FlightForm({ uid }) {
                 <Controller
                   name="flight"
                   control={control}
-                  defaultValue="Singapore Airlines SQ 23"
+                  defaultValue=""
                   rules={{ required: "Enter Flight" }}
                   render={({ field }) => (
                     <TextField
@@ -253,13 +253,18 @@ export default function FlightForm({ uid }) {
 
   return (
     <>
-      <span>
-        Departing: {flight.departingAirport}, {flight.departureDateTime}
-      </span>
-      <p>
-        Arriving: {flight.arrivingAirport}, {flight.arrivalDateTime}
-      </p>
-      <p>Flight: {flight.flight}</p>
+      <div className="flight-detail">
+        <iconify-icon inline icon="carbon:departure" />{" "}
+        {flight.departingAirport}
+        <iconify-icon inline icon="carbon:arrow-right" />{" "}
+        <iconify-icon inline icon="carbon:arrival" /> {flight.arrivingAirport}
+        <div style={{ fontSize: "0.7em" }}>{flight.flight}</div>
+      </div>
+      <div className="flight-time">
+        {flight.departureDateTime}{" "}
+        <iconify-icon inline icon="carbon:arrow-right" />{" "}
+        {flight.arrivalDateTime}
+      </div>
       <div>
         <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
           <IconButton>

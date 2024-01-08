@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
-import { Box, Container } from "@mui/system";
 import {
   onChildAdded,
   onChildChanged,
@@ -91,10 +90,10 @@ export default function AccommodationForm({ uid }) {
     return (
       <>
         <Button
-          sx={{ bgcolor: "#4D6D9A" }}
+          sx={{ bgcolor: "#4D6D9A", fontFamily: "IBM Plex Sans Var" }}
           variant="contained"
           onClick={() => setOpen(true)}
-          endIcon={<iconify-icon icon="ic:twotone-hotel" />}>
+          endIcon={<iconify-icon icon="carbon:hotel" />}>
           Enter Accommodation Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -107,7 +106,7 @@ export default function AccommodationForm({ uid }) {
                 <Controller
                   name="accommodation"
                   control={control}
-                  defaultValue="Hilton Singapore Orchard"
+                  defaultValue=""
                   rules={{ required: "Enter Accommodation" }}
                   render={({ field }) => (
                     <TextField
@@ -125,7 +124,7 @@ export default function AccommodationForm({ uid }) {
                 <Controller
                   name="address"
                   control={control}
-                  defaultValue="333 Orchard Rd, Singapore 238867"
+                  defaultValue=""
                   rules={{ required: "Enter Address" }}
                   render={({ field }) => (
                     <TextField
@@ -178,11 +177,11 @@ export default function AccommodationForm({ uid }) {
 
   return (
     <>
-      <div>
-        <h2>{accommodation?.accommodation}</h2>
-        <span style={{ fontFamily: "IBM Plex Sans Var" }}>
+      <div className="accommodation">
+        {accommodation?.accommodation}
+        <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
           {accommodation?.address}
-        </span>
+        </div>
       </div>
       <div>
         <a
@@ -198,8 +197,6 @@ export default function AccommodationForm({ uid }) {
         </IconButton>
       </div>
       <AccommodationFormDialog />
-      <br />
-      <br />
     </>
   );
 }
