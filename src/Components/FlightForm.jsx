@@ -95,7 +95,8 @@ export default function FlightForm({ uid }) {
         <Button
           variant="contained"
           onClick={() => setOpen(true)}
-          endIcon={<iconify-icon icon="ic:twotone-flight" />}>
+          endIcon={<iconify-icon icon="ic:twotone-flight" />}
+        >
           Enter Flight Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -223,7 +224,8 @@ export default function FlightForm({ uid }) {
                       component="label"
                       endIcon={
                         <iconify-icon icon="ic:twotone-airplane-ticket" />
-                      }>
+                      }
+                    >
                       Upload Ticket
                       <input
                         style={{ display: "none" }}
@@ -240,7 +242,8 @@ export default function FlightForm({ uid }) {
             <Button onClick={() => setOpen(false)}>Cancel</Button>
             <Button
               onClick={handleSubmit(writeFlightData)}
-              endIcon={<SendIcon />}>
+              endIcon={<SendIcon />}
+            >
               Submit
             </Button>
           </DialogActions>
