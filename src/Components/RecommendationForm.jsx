@@ -7,21 +7,23 @@ import {
   Select,
   FormHelperText,
 } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
 import useSWR from "swr";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import GoogleMap from "./GoogleMap";
 import MapCards from "./MapCards";
+import UidContext from "./Context";
 
 const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
-export default function RecommendationForm({ uid }) {
+export default function RecommendationForm() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
   const [radius, setRadius] = useState(0);
+
+  const uid = useContext(UidContext);
 
   console.log(uid);
 
@@ -171,10 +173,10 @@ export default function RecommendationForm({ uid }) {
         </p>
       )}
       {suggestionError?.message}
-      <ul>
+      {/* <ul>
         {places &&
           places.map((place) => <li key={place.uuid}>{place.name}</li>)}
-      </ul>
+      </ul> */}
       {!!places && <GoogleMap places={places} />}
       {!!places && <MapCards places={places} uid={uid} />}
     </>
