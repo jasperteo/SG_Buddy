@@ -14,7 +14,6 @@ import useSWR from "swr";
 import { useState } from "react";
 import GoogleMap from "./GoogleMap";
 import MapCards from "./MapCards";
-import { set } from "firebase/database";
 
 const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
@@ -133,7 +132,8 @@ export default function RecommendationForm() {
             <Select
               {...register("category", { required: "Select a Category" })}
               id="category"
-              defaultValue="">
+              defaultValue={[]}
+              multiple>
               <MenuItem value="accommodation">Accommodation</MenuItem>
               <MenuItem value="attractions">Attractions</MenuItem>
               <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
