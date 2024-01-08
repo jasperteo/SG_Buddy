@@ -5,18 +5,27 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import Box from "@mui/material/Box";
 import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 
-export default function BottomNavBar({ isLoggedIn, handleSignout }) {
+export default function BottomNavBar({ isLoggedIn }) {
+  const [value, setValue] = useState(0);
   return (
-    <Box sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}>
+    <Box
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}>
       <BottomNavigation
+        sx={{ bgcolor: "#4D6D9A" }}
         showLabels
-
-        // onChange={(event, newValue) => {
-        //   setValue(newValue);
-        // }}
-      >
+        value={value}
+        onChange={(e, newValue) => {
+          setValue(newValue);
+        }}>
         <BottomNavigationAction
+          sx={{ "*": { color: value === 0 ? "#F78888" : "#90CCF4" } }}
           component={RouterLink}
           to="/explore-recommendations"
           label="Explore"
@@ -24,6 +33,7 @@ export default function BottomNavBar({ isLoggedIn, handleSignout }) {
         />
 
         <BottomNavigationAction
+          sx={{ "*": { color: value === 1 ? "#F78888" : "#90CCF4" } }}
           component={RouterLink}
           to="/itinerary"
           label="Itinerary"
@@ -31,9 +41,9 @@ export default function BottomNavBar({ isLoggedIn, handleSignout }) {
         />
 
         <BottomNavigationAction
+          sx={{ "*": { color: value === 2 ? "#F78888" : "#90CCF4" } }}
           component={RouterLink}
           to="/"
-          onChange={handleSignout}
           label="Log out"
           icon={<LogoutIcon />}
         />
