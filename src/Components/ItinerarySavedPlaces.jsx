@@ -1,11 +1,11 @@
+// import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { red } from "@mui/material/colors";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import {
   onChildAdded,
@@ -19,7 +19,7 @@ import {
   off,
   getDatabase,
 } from "firebase/database";
-import { database, storage } from "../Components/FirebaseConfig";
+import { database } from "../Components/FirebaseConfig";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
@@ -40,7 +40,6 @@ const theme = createTheme({
 export default function ItinerarySavedPlaces({ uid }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
-  const [loginID, setLoginID] = useState(uid);
 
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
