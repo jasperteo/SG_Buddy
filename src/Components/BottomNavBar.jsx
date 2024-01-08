@@ -4,7 +4,7 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
 export default function BottomNavBar({ isLoggedIn, handleSignout }) {
   return (
@@ -16,17 +16,23 @@ export default function BottomNavBar({ isLoggedIn, handleSignout }) {
         //   setValue(newValue);
         // }}
       >
-        <Link to="/explore-recommendations">
-          <BottomNavigationAction
-            label="Explore"
-            icon={<TravelExploreIcon />}
-          />
-        </Link>
-        <Link to="/itinerary">
-          <BottomNavigationAction label="Itinerary" icon={<EventNoteIcon />} />
-        </Link>
+        <BottomNavigationAction
+          component={RouterLink}
+          to="/explore-recommendations"
+          label="Explore"
+          icon={<TravelExploreIcon />}
+        />
 
         <BottomNavigationAction
+          component={RouterLink}
+          to="/itinerary"
+          label="Itinerary"
+          icon={<EventNoteIcon />}
+        />
+
+        <BottomNavigationAction
+          component={RouterLink}
+          to="/"
           onChange={handleSignout}
           label="Log out"
           icon={<LogoutIcon />}
