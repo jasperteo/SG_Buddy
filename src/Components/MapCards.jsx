@@ -34,9 +34,7 @@ const theme = createTheme({
 });
 
 export default function MapCards({ places, uid }) {
-  //holds information on all places returned from recommendation form
-
-  console.log(places);
+  console.log(uid);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -81,15 +79,6 @@ export default function MapCards({ places, uid }) {
     console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
-
-  //sorts array of objects based on date property
-  // const sortedArray = [...favPlaces].sort((a, b) => {
-  //   //convert strings back to date
-  //   const dateA = a.val.date ? new Date(a.val.date) : new Date("9999-12-31"); // Use a max date value for objects without dates
-  //   const dateB = b.val.date ? new Date(b.val.date) : new Date("9999-12-31");
-
-  //   return dateA - dateB;
-  // });
 
   useEffect(() => {
     // onChildAdded will return data for every child at the reference and every subsequent new child
@@ -140,7 +129,7 @@ export default function MapCards({ places, uid }) {
               <CardActions>{varyButton(place, index)}</CardActions>
             </Card>
           ))}
-        <ItinerarySavedPlaces />
+        <ItinerarySavedPlaces uid={uid} />
       </ThemeProvider>
     </div>
   );

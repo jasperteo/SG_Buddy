@@ -8,36 +8,34 @@ import { Link as RouterLink } from "react-router-dom";
 
 export default function BottomNavBar({ isLoggedIn, handleSignout }) {
   return (
-    <Box sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}>
-      <BottomNavigation
-        showLabels
+    <div>
+      {isLoggedIn && (
+        <Box sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}>
+          <BottomNavigation showLabels>
+            <BottomNavigationAction
+              component={RouterLink}
+              to="/explore-recommendations"
+              label="Explore"
+              icon={<TravelExploreIcon />}
+            />
 
-        // onChange={(event, newValue) => {
-        //   setValue(newValue);
-        // }}
-      >
-        <BottomNavigationAction
-          component={RouterLink}
-          to="/explore-recommendations"
-          label="Explore"
-          icon={<TravelExploreIcon />}
-        />
+            <BottomNavigationAction
+              component={RouterLink}
+              to="/itinerary"
+              label="Itinerary"
+              icon={<EventNoteIcon />}
+            />
 
-        <BottomNavigationAction
-          component={RouterLink}
-          to="/itinerary"
-          label="Itinerary"
-          icon={<EventNoteIcon />}
-        />
-
-        <BottomNavigationAction
-          component={RouterLink}
-          to="/"
-          onChange={handleSignout}
-          label="Log out"
-          icon={<LogoutIcon />}
-        />
-      </BottomNavigation>
-    </Box>
+            <BottomNavigationAction
+              component={RouterLink}
+              to="/"
+              onChange={handleSignout}
+              label="Log out"
+              icon={<LogoutIcon />}
+            />
+          </BottomNavigation>
+        </Box>
+      )}
+    </div>
   );
 }

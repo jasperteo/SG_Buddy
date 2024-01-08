@@ -193,31 +193,30 @@ export default function FlightForm({ uid }) {
             )}
           />
         </div>
-        <p>
-          <ButtonGroup variant="contained">
-            <Button type="submit" endIcon={<SendIcon />}>
-              Send
-            </Button>
-            <Button onClick={deleteFlightData} endIcon={<DeleteIcon />}>
-              Delete
-            </Button>
-            <Controller
-              name="flightFile"
-              control={control}
-              defaultValue={null}
-              render={({ field }) => (
-                <Button component="label" endIcon={<CloudUploadIcon />}>
-                  Upload file
-                  <input
-                    style={{ display: "none" }}
-                    type="file"
-                    onChange={(e) => field.onChange(e.target.files[0])}
-                  />
-                </Button>
-              )}
-            />
-          </ButtonGroup>
-        </p>
+
+        <ButtonGroup variant="contained">
+          <Button type="submit" endIcon={<SendIcon />}>
+            Send
+          </Button>
+          <Button onClick={deleteFlightData} endIcon={<DeleteIcon />}>
+            Delete
+          </Button>
+          <Controller
+            name="flightFile"
+            control={control}
+            defaultValue={null}
+            render={({ field }) => (
+              <Button component="label" endIcon={<CloudUploadIcon />}>
+                Upload file
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files[0])}
+                />
+              </Button>
+            )}
+          />
+        </ButtonGroup>
       </form>
       <div>
         <p>

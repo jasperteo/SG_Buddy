@@ -40,6 +40,8 @@ export default function ItinerarySavedPlaces({ uid }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
 
+  console.log(uid);
+
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
@@ -117,7 +119,8 @@ export default function ItinerarySavedPlaces({ uid }) {
             <IconButton
               aria-label="add to favorites"
               color="primary"
-              onClick={() => deleteSavedFav(favPlaces[index].key)}>
+              onClick={() => deleteSavedFav(favPlaces[index].key)}
+            >
               <FavoriteIcon />
             </IconButton>
             <DatePicker

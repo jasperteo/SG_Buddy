@@ -17,11 +17,13 @@ import MapCards from "./MapCards";
 
 const API_KEY = import.meta.env.VITE_TIH_API_KEY;
 
-export default function RecommendationForm() {
+export default function RecommendationForm({ uid }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [location, setLocation] = useState("");
   const [dataset, setDataset] = useState("");
   const [radius, setRadius] = useState(0);
+
+  console.log(uid);
 
   const {
     register,
@@ -127,13 +129,15 @@ export default function RecommendationForm() {
           <FormControl
             variant="filled"
             sx={{ m: 1, minWidth: 220 }}
-            error={!!errors.category}>
+            error={!!errors.category}
+          >
             <InputLabel>Category</InputLabel>
             <Select
               {...register("category", { required: "Select a Category" })}
               id="category"
               defaultValue={[]}
-              multiple>
+              multiple
+            >
               <MenuItem value="accommodation">Accommodation</MenuItem>
               <MenuItem value="attractions">Attractions</MenuItem>
               <MenuItem value="bars_clubs">Bars & Clubs</MenuItem>
@@ -171,7 +175,7 @@ export default function RecommendationForm() {
           places.map((place) => <li key={place.uuid}>{place.name}</li>)}
       </ul>
       {!!places && <GoogleMap places={places} />}
-      {!!places && <MapCards places={places} />}
+      {!!places && <MapCards places={places} uid={uid} />}
     </>
   );
 }

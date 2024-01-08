@@ -62,7 +62,7 @@ export default function App() {
       path: "/explore-recommendations",
       element: (
         <div>
-          <RecommendationForm />
+          <RecommendationForm uid={uid} />
           <BottomNavBar isLoggedIn={isLoggedIn} handleSignOut={handleSignOut} />
         </div>
       ),
