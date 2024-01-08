@@ -1,12 +1,9 @@
-// import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import {
   onChildAdded,
@@ -26,17 +23,8 @@ import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
 
-//mui color red reference
-const theme = createTheme({
-  palette: {
-    primary: red,
-  },
-});
-
 export default function MapCards({ places, uid }) {
-  //holds information on all places returned from recommendation form
-
-  console.log(places);
+  console.log(uid);
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
   const [loginID, setLoginID] = useState(uid);
@@ -82,15 +70,6 @@ export default function MapCards({ places, uid }) {
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
 
-  //sorts array of objects based on date property
-  // const sortedArray = [...favPlaces].sort((a, b) => {
-  //   //convert strings back to date
-  //   const dateA = a.val.date ? new Date(a.val.date) : new Date("9999-12-31"); // Use a max date value for objects without dates
-  //   const dateB = b.val.date ? new Date(b.val.date) : new Date("9999-12-31");
-
-  //   return dateA - dateB;
-  // });
-
   useEffect(() => {
     // onChildAdded will return data for every child at the reference and every subsequent new child
     onChildAdded(favouriteListRef, (data) =>
@@ -117,7 +96,7 @@ export default function MapCards({ places, uid }) {
     return (
       <IconButton
         aria-label="add to favorites"
-        color={favoritePlace ? "primary" : "default"}
+        sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
         }
@@ -129,19 +108,17 @@ export default function MapCards({ places, uid }) {
 
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        {places &&
-          places.map((place, index) => (
-            <Card key={place.uuid}>
-              <CardHeader title={place.name} />
-              <CardContent>
-                <p>{place.address}</p>
-              </CardContent>
-              <CardActions>{varyButton(place, index)}</CardActions>
-            </Card>
-          ))}
-        <ItinerarySavedPlaces />
-      </ThemeProvider>
+      {places &&
+        places.map((place, index) => (
+          <Card key={place.uuid}>
+            <CardHeader title={place.name} />
+            <CardContent>
+              <p>{place.address}</p>
+            </CardContent>
+            <CardActions>{varyButton(place, index)}</CardActions>
+          </Card>
+        ))}
+      <ItinerarySavedPlaces uid={uid} />
     </div>
   );
 }

@@ -1,11 +1,8 @@
-// import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import {
   onChildAdded,
@@ -22,23 +19,17 @@ import { database } from "../Components/FirebaseConfig";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMap from "./GoogleMap";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
 
-//mui color red reference
-const theme = createTheme({
-  palette: {
-    primary: red,
-  },
-});
-
 export default function ItinerarySavedPlaces({ uid }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
+
+  console.log(uid);
 
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
@@ -116,8 +107,9 @@ export default function ItinerarySavedPlaces({ uid }) {
             <p>{place.val.address}</p>
             <IconButton
               aria-label="add to favorites"
-              color="primary"
-              onClick={() => deleteSavedFav(favPlaces[index].key)}>
+              sx={{ color: "#FD1D1D" }}
+              onClick={() => deleteSavedFav(favPlaces[index].key)}
+            >
               <FavoriteIcon />
             </IconButton>
             <DatePicker
@@ -141,10 +133,9 @@ export default function ItinerarySavedPlaces({ uid }) {
 
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        {favPlaces && <h2>Favourites</h2>}
-        {favPlaces && favPlacesListItems(favPlaces)}
-      </ThemeProvider>
+      {favPlaces && <h2>Favourites</h2>}
+      {favPlaces && favPlacesListItems(favPlaces)}
+
       {favPlaces && <GoogleMap places={retrieveVal()} />}
     </div>
   );

@@ -53,15 +53,14 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
     <>
       <form>
         {isLoggedIn ? (
-          <p>
-            <Button
-              onClick={logOut}
-              type="submit"
-              variant="contained"
-              endIcon={<SendIcon />}>
-              Log Out
-            </Button>
-          </p>
+          <Button
+            onClick={logOut}
+            type="submit"
+            variant="contained"
+            endIcon={<SendIcon />}
+          >
+            Log Out
+          </Button>
         ) : (
           <>
             <div>
@@ -106,24 +105,25 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
                 )}
               />
             </div>
-            <p>
-              <ButtonGroup variant="contained">
-                <Button
-                  onClick={handleSubmit(logIn)}
-                  type="submit"
-                  variant="contained"
-                  endIcon={<SendIcon />}>
-                  Log In
-                </Button>{" "}
-                <Button
-                  onClick={handleSubmit(signUp)}
-                  type="submit"
-                  variant="contained"
-                  endIcon={<SendIcon />}>
-                  Sign Up
-                </Button>
-              </ButtonGroup>
-            </p>
+
+            <ButtonGroup variant="contained">
+              <Button
+                onClick={handleSubmit(logIn)}
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
+                Log In
+              </Button>{" "}
+              <Button
+                onClick={handleSubmit(signUp)}
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+              >
+                Sign Up
+              </Button>
+            </ButtonGroup>
           </>
         )}
       </form>
