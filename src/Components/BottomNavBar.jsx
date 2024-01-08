@@ -41,7 +41,11 @@ export default function BottomNavBar({ isLoggedIn }) {
         />
 
         <BottomNavigationAction
-          sx={{ "*": { color: value === 2 ? "#F78888" : "#90CCF4" } }}
+          sx={{
+            "*": {
+              color: value === 2 ? "#F78888" : "#90CCF4",
+            },
+          }}
           component={RouterLink}
           to="/"
           label="Log out"

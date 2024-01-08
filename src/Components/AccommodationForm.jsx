@@ -7,8 +7,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Container } from "@mui/system";
 import {
   onChildAdded,
   onChildChanged,
@@ -92,14 +91,17 @@ export default function AccommodationForm({ uid }) {
     return (
       <>
         <Button
+          sx={{ bgcolor: "#4D6D9A" }}
           variant="contained"
           onClick={() => setOpen(true)}
           endIcon={<iconify-icon icon="ic:twotone-hotel" />}>
           Enter Accommodation Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Accommodation Details</DialogTitle>
-          <DialogContent>
+          <DialogTitle sx={{ bgcolor: "#FFDDE6" }}>
+            Accommodation Details
+          </DialogTitle>
+          <DialogContent sx={{ bgcolor: "#FFDDE6" }}>
             <form onSubmit={handleSubmit(writeAccommodationData)}>
               <div>
                 <Controller
@@ -158,11 +160,14 @@ export default function AccommodationForm({ uid }) {
               </p>
             </form>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <DialogActions sx={{ bgcolor: "#FFDDE6" }}>
+            <Button onClick={() => setOpen(false)} sx={{ color: "#5F6366" }}>
+              Cancel
+            </Button>
             <Button
               onClick={handleSubmit(writeAccommodationData)}
-              endIcon={<SendIcon />}>
+              endIcon={<iconify-icon icon="carbon:send" />}
+              sx={{ color: "#5F6366" }}>
               Submit
             </Button>
           </DialogActions>
@@ -174,9 +179,12 @@ export default function AccommodationForm({ uid }) {
   return (
     <>
       <div>
-        <AccommodationFormDialog />
-        <p>Accommodation: {accommodation?.accommodation}</p>
-        <p>Address: {accommodation?.address}</p>
+        <h2>{accommodation?.accommodation}</h2>
+        <span style={{ fontFamily: "IBM Plex Sans Var" }}>
+          {accommodation?.address}
+        </span>
+      </div>
+      <div>
         <a
           target="_blank"
           href={accommodation.accommodationFileURL}
@@ -186,9 +194,12 @@ export default function AccommodationForm({ uid }) {
           </IconButton>
         </a>
         <IconButton onClick={deleteAccommodationData}>
-          <DeleteIcon />
+          <iconify-icon icon="carbon:trash-can" />
         </IconButton>
       </div>
+      <AccommodationFormDialog />
+      <br />
+      <br />
     </>
   );
 }

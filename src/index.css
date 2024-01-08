@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "IBM Plex Sans Var";
+  src: url(/IBM\ Plex\ Sans\ Var-Roman.woff2);
+}
+
 :root {
   font-family: InterVariable, system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;

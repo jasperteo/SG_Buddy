@@ -7,8 +7,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -93,14 +91,15 @@ export default function FlightForm({ uid }) {
     return (
       <>
         <Button
+          sx={{ bgcolor: "#4D6D9A" }}
           variant="contained"
           onClick={() => setOpen(true)}
           endIcon={<iconify-icon icon="ic:twotone-flight" />}>
           Enter Flight Details
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Flight Details</DialogTitle>
-          <DialogContent>
+          <DialogTitle sx={{ bgcolor: "#FFDDE6" }}>Flight Details</DialogTitle>
+          <DialogContent sx={{ bgcolor: "#FFDDE6" }}>
             <form>
               <div>
                 <Controller
@@ -236,11 +235,14 @@ export default function FlightForm({ uid }) {
               </p>
             </form>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <DialogActions sx={{ bgcolor: "#FFDDE6" }}>
+            <Button onClick={() => setOpen(false)} sx={{ color: "#5F6366" }}>
+              Cancel
+            </Button>
             <Button
               onClick={handleSubmit(writeFlightData)}
-              endIcon={<SendIcon />}>
+              endIcon={<iconify-icon icon="carbon:send" />}
+              sx={{ color: "#5F6366" }}>
               Submit
             </Button>
           </DialogActions>
@@ -251,24 +253,24 @@ export default function FlightForm({ uid }) {
 
   return (
     <>
+      <span>
+        Departing: {flight.departingAirport}, {flight.departureDateTime}
+      </span>
+      <p>
+        Arriving: {flight.arrivingAirport}, {flight.arrivalDateTime}
+      </p>
+      <p>Flight: {flight.flight}</p>
       <div>
-        <FlightFormDialog />
-        <p>
-          Departing: {flight.departingAirport}, {flight.departureDateTime}
-        </p>
-        <p>
-          Arriving: {flight.arrivingAirport}, {flight.arrivalDateTime}
-        </p>
-        <p>Flight: {flight.flight}</p>
         <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
           <IconButton>
             <iconify-icon inline icon="carbon:attachment" />
           </IconButton>
         </a>
         <IconButton onClick={deleteFlightData}>
-          <DeleteIcon />
+          <iconify-icon icon="carbon:trash-can" />
         </IconButton>
       </div>
+      <FlightFormDialog />
     </>
   );
 }
