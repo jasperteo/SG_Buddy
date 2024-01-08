@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import GoogleMap from "./Components/GoogleMap";
 import RecommendationForm from "./Components/RecommendationForm";
 import MapCards from "./Components/MapCards";
 import Itinerary from "./Components/Itinerary";

@@ -1,12 +1,9 @@
-// import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { ThemeProvider, createTheme } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import {
   onChildAdded,
@@ -25,13 +22,6 @@ import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
-
-//mui color red reference
-const theme = createTheme({
-  palette: {
-    primary: red,
-  },
-});
 
 export default function MapCards({ places, uid }) {
   console.log(uid);
@@ -106,7 +96,7 @@ export default function MapCards({ places, uid }) {
     return (
       <IconButton
         aria-label="add to favorites"
-        color={favoritePlace ? "primary" : "default"}
+        sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
         }
@@ -118,19 +108,17 @@ export default function MapCards({ places, uid }) {
 
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        {places &&
-          places.map((place, index) => (
-            <Card key={place.uuid}>
-              <CardHeader title={place.name} />
-              <CardContent>
-                <p>{place.address}</p>
-              </CardContent>
-              <CardActions>{varyButton(place, index)}</CardActions>
-            </Card>
-          ))}
-        <ItinerarySavedPlaces uid={uid} />
-      </ThemeProvider>
+      {places &&
+        places.map((place, index) => (
+          <Card key={place.uuid}>
+            <CardHeader title={place.name} />
+            <CardContent>
+              <p>{place.address}</p>
+            </CardContent>
+            <CardActions>{varyButton(place, index)}</CardActions>
+          </Card>
+        ))}
+      <ItinerarySavedPlaces uid={uid} />
     </div>
   );
 }
