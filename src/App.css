@@ -59,3 +59,15 @@
   font-weight: 600;
   margin: 0.5em;
 }
+
+#fav-icon {
+  margin: 0% 0% 2% 10%;
+}
+
+#map {
+  margin-bottom: 3vh;
+}
+
+.css-46bh2p-MuiCardContent-root {
+  padding: 2% 5% !important;
+}

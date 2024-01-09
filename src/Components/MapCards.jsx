@@ -95,6 +95,7 @@ export default function MapCards({ places, uid }) {
     );
     return (
       <IconButton
+        id="fav-icon"
         aria-label="add to favorites"
         sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
@@ -112,9 +113,7 @@ export default function MapCards({ places, uid }) {
         places.map((place, index) => (
           <Card key={place.uuid}>
             <CardHeader title={place.name} />
-            <CardContent>
-              <p>{place.address}</p>
-            </CardContent>
+            <CardContent>{place.address}</CardContent>
             <CardActions>{varyButton(place, index)}</CardActions>
           </Card>
         ))}

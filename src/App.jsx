@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import RecommendationForm from "./Components/RecommendationForm";
-import MapCards from "./Components/MapCards";
 import Itinerary from "./Components/Itinerary";
 import LoginForm from "./Components/LogInForm";
 import { onAuthStateChanged } from "firebase/auth";
@@ -16,6 +14,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import "./App.css";
 
 export default function App() {
   //check login status

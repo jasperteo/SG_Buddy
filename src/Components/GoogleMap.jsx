@@ -16,7 +16,7 @@ export default function GoogleMap({ places }) {
 
   //component renders google maps and markers for each recommendation based on lat & long
   return (
-    <div style={{ height: "80vh", width: "100%" }}>
+    <div id="map" style={{ height: "80vh", width: "100%" }}>
       <APIProvider apiKey={key}>
         <Map
           center={{ lat: 1.3649170000000002, lng: 103.82287200000002 }}
