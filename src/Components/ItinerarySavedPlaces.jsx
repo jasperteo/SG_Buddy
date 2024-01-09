@@ -102,7 +102,7 @@ export default function ItinerarySavedPlaces() {
         <Card key={place.key}>
           <CardHeader title={place.val.name} />
           <CardContent>
-            <p>{place.val.address}</p>
+            {place.val.address}
             <IconButton
               aria-label="add to favorites"
               sx={{ color: "#FD1D1D" }}

@@ -62,8 +62,29 @@
   margin: 0.5em;
 }
 
+#fav-icon {
+  margin: 0% 0% 2% 10%;
+}
+
+#map {
+  margin-bottom: 3vh;
+}
+
+.css-46bh2p-MuiCardContent-root {
+  padding: 2% 5% !important;
+}
+
 #title {
   font-family: "Permanent Marker";
   font-size: 3em;
   margin: 1em;
+}
+
+.css-1qvr50w-MuiTypography-root {
+  font-family: InterVariable, system-ui, Helvetica, Arial, sans-serif !important;
+}
+
+.css-bhp9pd-MuiPaper-root-MuiCard-root {
+  border-color: #5f6366;
+  border-radius: 0.5em !important;
 }

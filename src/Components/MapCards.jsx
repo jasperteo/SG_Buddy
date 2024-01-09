@@ -76,11 +76,13 @@ export default function MapCards({ places }) {
     );
     return (
       <IconButton
+        id="fav-icon"
         aria-label="add to favorites"
         sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }>
+        }
+      >
         <FavoriteIcon />
       </IconButton>
     );
@@ -90,11 +92,9 @@ export default function MapCards({ places }) {
     <div>
       {places &&
         places.map((place, index) => (
-          <Card key={place.uuid}>
+          <Card key={place.uuid} id="card">
             <CardHeader title={place.name} />
-            <CardContent>
-              <p>{place.address}</p>
-            </CardContent>
+            <CardContent>{place.address}</CardContent>
             <CardActions>{varyButton(place, index)}</CardActions>
           </Card>
         ))}
