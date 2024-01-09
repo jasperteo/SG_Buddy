@@ -184,9 +184,7 @@ export default function AccommodationForm() {
         borderColor="#5F6366"
         borderRadius="0.5em"
         bgcolor="#90CCF4"
-        p="2em"
-        width="100vw">
-        {" "}
+        p="2em">
         <div className="accommodation">
           {accommodation?.accommodation}
           <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
