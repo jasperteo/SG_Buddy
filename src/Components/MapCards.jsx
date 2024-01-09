@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   onChildAdded,
   onChildChanged,
@@ -13,21 +13,20 @@ import {
   push,
   set,
   remove,
-  update,
   off,
-  getDatabase,
 } from "firebase/database";
-import { database } from "../Components/FirebaseConfig";
+import { database } from "./FirebaseConfig";
 import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
+import UidContext from "./Context";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
 
-export default function MapCards({ places, uid }) {
-  console.log(uid);
+export default function MapCards({ places }) {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
-  const [loginID, setLoginID] = useState(uid);
+
+  const uid = useContext(UidContext);
 
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
@@ -44,24 +43,6 @@ export default function MapCards({ places, uid }) {
       lng: place.lng,
       uuid: place.uuid,
     });
-  };
-
-  //save date const
-  const addDate = (date, place) => {
-    console.log(date.$d);
-    console.log(place.key);
-
-    if (date.$d) {
-      const db = getDatabase();
-      update(ref(db, `/${uid}/favourites/${place.key}`), {
-        name: place.val.name,
-        address: place.val.address,
-        lat: place.val.lat,
-        lng: place.val.lng,
-        uuid: place.val.uuid,
-        date: date.$d,
-      });
-    }
   };
 
   //deletes specific place using data, which is key
@@ -100,8 +81,7 @@ export default function MapCards({ places, uid }) {
         sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }
-      >
+        }>
         <FavoriteIcon />
       </IconButton>
     );

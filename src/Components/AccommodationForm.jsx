@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
+import Box from "@mui/system/Box";
 import {
   onChildAdded,
   onChildChanged,
@@ -23,14 +24,15 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { database, storage } from "./FirebaseConfig";
+import UidContext from "./Context";
 
 const DB_ACCOMMODATION_KEY = "itinerary/accommodation";
 
-export default function AccommodationForm({ uid }) {
+export default function AccommodationForm() {
   const [accommodation, setAccommodation] = useState({});
-
+  const uid = useContext(UidContext);
   const {
     handleSubmit,
     formState: { errors },
@@ -177,26 +179,35 @@ export default function AccommodationForm({ uid }) {
 
   return (
     <>
-      <div className="accommodation">
-        {accommodation?.accommodation}
-        <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
-          {accommodation?.address}
+      <Box
+        border="1px solid"
+        borderColor="#5F6366"
+        borderRadius="0.5em"
+        bgcolor="#90CCF4"
+        p="2em"
+        width="100vw">
+        {" "}
+        <div className="accommodation">
+          {accommodation?.accommodation}
+          <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
+            {accommodation?.address}
+          </div>
         </div>
-      </div>
-      <div>
-        <a
-          target="_blank"
-          href={accommodation.accommodationFileURL}
-          rel="noreferrer">
-          <IconButton>
-            <iconify-icon inline icon="carbon:attachment" />
+        <div>
+          <a
+            target="_blank"
+            href={accommodation.accommodationFileURL}
+            rel="noreferrer">
+            <IconButton>
+              <iconify-icon inline icon="carbon:attachment" />
+            </IconButton>
+          </a>
+          <IconButton onClick={deleteAccommodationData}>
+            <iconify-icon icon="carbon:trash-can" />
           </IconButton>
-        </a>
-        <IconButton onClick={deleteAccommodationData}>
-          <iconify-icon icon="carbon:trash-can" />
-        </IconButton>
-      </div>
-      <AccommodationFormDialog />
+        </div>
+        <AccommodationFormDialog />
+      </Box>
     </>
   );
 }

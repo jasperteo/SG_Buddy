@@ -7,8 +7,7 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material/";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Box from "@mui/system/Box";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import {
   onChildAdded,
@@ -26,13 +25,15 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { database, storage } from "./FirebaseConfig";
+import UidContext from "./Context";
 
 const DB_FLIGHT_KEY = "itinerary/flight";
 
-export default function FlightForm({ uid }) {
+export default function FlightForm() {
   const [flight, setFlight] = useState({});
+  const uid = useContext(UidContext);
 
   const {
     handleSubmit,
@@ -120,31 +121,29 @@ export default function FlightForm({ uid }) {
               </div>
               <br />
               <div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Controller
-                    name="departureDateTime"
-                    control={control}
-                    defaultValue={null}
-                    rules={{ required: "Enter Departure Date and Time" }}
-                    render={({ field }) => (
-                      <DateTimePicker
-                        {...field}
-                        disablePast
-                        label="Departure Date & Time"
-                        format={"DD/MM/YYYY hh:mm a"}
-                        value={field.value}
-                        onChange={(newValue) =>
-                          setValue("departureDateTime", newValue)
-                        }
-                        slotProps={{
-                          textField: {
-                            helperText: errors?.departureDateTime?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
+                <Controller
+                  name="departureDateTime"
+                  control={control}
+                  defaultValue={null}
+                  rules={{ required: "Enter Departure Date and Time" }}
+                  render={({ field }) => (
+                    <DateTimePicker
+                      {...field}
+                      disablePast
+                      label="Departure Date & Time"
+                      format={"DD/MM/YYYY hh:mm a"}
+                      value={field.value}
+                      onChange={(newValue) =>
+                        setValue("departureDateTime", newValue)
+                      }
+                      slotProps={{
+                        textField: {
+                          helperText: errors?.departureDateTime?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
               </div>
               <br />
               <div>
@@ -167,31 +166,29 @@ export default function FlightForm({ uid }) {
               </div>
               <br />
               <div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Controller
-                    name="arrivalDateTime"
-                    control={control}
-                    defaultValue={null}
-                    rules={{ required: "Enter Arrival Date and Time" }}
-                    render={({ field }) => (
-                      <DateTimePicker
-                        {...field}
-                        disablePast
-                        label="Arrival Date & Time"
-                        format={"DD/MM/YYYY hh:mm a"}
-                        value={field.value}
-                        onChange={(newValue) =>
-                          setValue("arrivalDateTime", newValue)
-                        }
-                        slotProps={{
-                          textField: {
-                            helperText: errors?.arrivalDateTime?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
+                <Controller
+                  name="arrivalDateTime"
+                  control={control}
+                  defaultValue={null}
+                  rules={{ required: "Enter Arrival Date and Time" }}
+                  render={({ field }) => (
+                    <DateTimePicker
+                      {...field}
+                      disablePast
+                      label="Arrival Date & Time"
+                      format={"DD/MM/YYYY hh:mm a"}
+                      value={field.value}
+                      onChange={(newValue) =>
+                        setValue("arrivalDateTime", newValue)
+                      }
+                      slotProps={{
+                        textField: {
+                          helperText: errors?.arrivalDateTime?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
               </div>
               <br />
               <div>
@@ -253,29 +250,37 @@ export default function FlightForm({ uid }) {
 
   return (
     <>
-      <div className="flight-detail">
-        <iconify-icon inline icon="carbon:departure" />{" "}
-        {flight.departingAirport}
-        <iconify-icon inline icon="carbon:arrow-right" />{" "}
-        <iconify-icon inline icon="carbon:arrival" /> {flight.arrivingAirport}
-        <div style={{ fontSize: "0.7em" }}>{flight.flight}</div>
-      </div>
-      <div className="flight-time">
-        {flight.departureDateTime}{" "}
-        <iconify-icon inline icon="carbon:arrow-right" />{" "}
-        {flight.arrivalDateTime}
-      </div>
-      <div>
-        <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
-          <IconButton>
-            <iconify-icon inline icon="carbon:attachment" />
+      <Box
+        border="1px solid"
+        borderColor="#5F6366"
+        borderRadius="0.5em"
+        bgcolor="#90CCF4"
+        p="2em"
+        width="100vw">
+        <div className="flight-detail">
+          <iconify-icon inline icon="carbon:departure" />{" "}
+          {flight.departingAirport}
+          <iconify-icon inline icon="carbon:arrow-right" />{" "}
+          <iconify-icon inline icon="carbon:arrival" /> {flight.arrivingAirport}
+          <div style={{ fontSize: "0.7em" }}>{flight.flight}</div>
+        </div>
+        <div className="flight-time">
+          {flight.departureDateTime}{" "}
+          <iconify-icon inline icon="carbon:arrow-right" />{" "}
+          {flight.arrivalDateTime}
+        </div>
+        <div>
+          <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
+            <IconButton>
+              <iconify-icon inline icon="carbon:attachment" />
+            </IconButton>
+          </a>
+          <IconButton onClick={deleteFlightData}>
+            <iconify-icon icon="carbon:trash-can" />
           </IconButton>
-        </a>
-        <IconButton onClick={deleteFlightData}>
-          <iconify-icon icon="carbon:trash-can" />
-        </IconButton>
-      </div>
-      <FlightFormDialog />
+        </div>
+        <FlightFormDialog />
+      </Box>
     </>
   );
 }

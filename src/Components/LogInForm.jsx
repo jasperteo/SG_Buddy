@@ -7,7 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 
-export default function LogInForm({ isLoggedIn, email, uid }) {
+export default function LogInForm({ isLoggedIn, email }) {
   const {
     control,
     handleSubmit,
@@ -133,7 +133,6 @@ export default function LogInForm({ isLoggedIn, email, uid }) {
         )}
       </form>
       {!!email && <p>Welcome! {email}</p>}
-      {!!uid && <p>Your UID: {uid}</p>}
     </>
   );
 }
