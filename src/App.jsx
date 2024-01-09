@@ -80,5 +80,3 @@ export default function App() {
     </>
   );
 }
-
-export { UidContext };
