@@ -255,8 +255,7 @@ export default function FlightForm() {
         borderColor="#5F6366"
         borderRadius="0.5em"
         bgcolor="#90CCF4"
-        p="2em"
-        width="100vw">
+        p="2em">
         <div className="flight-detail">
           <iconify-icon inline icon="carbon:departure" />{" "}
           {flight.departingAirport}
