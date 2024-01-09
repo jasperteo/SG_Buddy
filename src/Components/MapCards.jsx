@@ -33,7 +33,6 @@ export default function MapCards({ places }) {
 
   //retrieves the specific place recommended --> add to firebase
   const saveToFavs = (index) => {
-    console.log(places[index]);
     const place = places[index];
     const newFavouriteRef = push(favouriteListRef);
     set(newFavouriteRef, {
@@ -47,7 +46,6 @@ export default function MapCards({ places }) {
 
   //deletes specific place using data, which is key
   const deleteSavedFav = (data) => {
-    console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
 
@@ -81,8 +79,7 @@ export default function MapCards({ places }) {
         sx={{ color: favoritePlace ? "#FD1D1D" : "#A9A9A9" }}
         onClick={() =>
           favoritePlace ? deleteSavedFav(favoritePlace.key) : saveToFavs(index)
-        }
-      >
+        }>
         <FavoriteIcon />
       </IconButton>
     );

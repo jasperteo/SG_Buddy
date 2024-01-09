@@ -27,15 +27,11 @@ export default function ItinerarySavedPlaces() {
   const [favPlaces, setFavPlaces] = useState([]);
   const uid = useContext(UidContext);
 
-  console.log(uid);
-
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
   //save date added by user for when they want to visit
   const addDate = (date, place) => {
-    console.log(date.$d);
-    console.log(place.key);
     if (date.$d) {
       update(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${place.key}`), {
         name: place.val.name,
@@ -50,7 +46,6 @@ export default function ItinerarySavedPlaces() {
 
   //deletes specific recommendation using data, which is key
   const deleteSavedFav = (data) => {
-    console.log(`delete ${data}`);
     remove(ref(database, `${uid}/${DB_FAVOURITES_KEY}/${data}`));
   };
 
@@ -96,7 +91,6 @@ export default function ItinerarySavedPlaces() {
 
   //renders list of all saved places regardless of category
   const favPlacesListItems = (places) => {
-    console.log("reached favplaces func");
     if (places.length > 0) {
       return places.map((place, index) => (
         <Card key={place.key}>
@@ -107,8 +101,7 @@ export default function ItinerarySavedPlaces() {
             <IconButton
               aria-label="add to favorites"
               sx={{ color: "#FD1D1D" }}
-              onClick={() => deleteSavedFav(favPlaces[index].key)}
-            >
+              onClick={() => deleteSavedFav(favPlaces[index].key)}>
               <FavoriteIcon />
             </IconButton>
             <DatePicker

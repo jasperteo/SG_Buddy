@@ -9,7 +9,6 @@ import { useState } from "react";
 export default function GoogleMap({ places }) {
   //key for google maps api
   const key = import.meta.env.VITE_GMAP_API_KEY;
-  console.log(places);
 
   //for markers'info window
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -21,8 +20,7 @@ export default function GoogleMap({ places }) {
         <Map
           center={{ lat: 1.3649170000000002, lng: 103.82287200000002 }}
           zoom={12}
-          mapId={key}
-        >
+          mapId={key}>
           {places.map((place) => (
             <AdvancedMarker
               key={place.uuid}
@@ -35,8 +33,7 @@ export default function GoogleMap({ places }) {
                 place === selectedPlace
                   ? setSelectedPlace(null)
                   : setSelectedPlace(place);
-              }}
-            ></AdvancedMarker>
+              }}></AdvancedMarker>
           ))}
           {selectedPlace && (
             <InfoWindow
@@ -44,8 +41,7 @@ export default function GoogleMap({ places }) {
                 lat: selectedPlace.lat,
                 lng: selectedPlace.lng,
               }}
-              onCloseClick={() => setSelectedPlace(undefined)}
-            >
+              onCloseClick={() => setSelectedPlace(undefined)}>
               <div>
                 <p>{selectedPlace.name}</p>
               </div>
