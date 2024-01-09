@@ -25,8 +25,6 @@ export default function RecommendationForm() {
 
   const uid = useContext(UidContext);
 
-  console.log(uid);
-
   const {
     register,
     handleSubmit,

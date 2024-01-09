@@ -58,9 +58,21 @@ export default function FlightForm() {
     }
     set(flightRef, {
       departingAirport: data.departingAirport,
-      departureDateTime: data.departureDateTime.$d.toLocaleString(),
+      departureDateTime: data.departureDateTime.$d.toLocaleString([], {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+      }),
       arrivingAirport: data.arrivingAirport,
-      arrivalDateTime: data.arrivalDateTime.$d.toLocaleString(),
+      arrivalDateTime: data.arrivalDateTime.$d.toLocaleString([], {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "numeric",
+        minute: "numeric",
+      }),
       flight: data.flight,
       flightFileURL: url,
       flightFileName: name,
@@ -249,37 +261,40 @@ export default function FlightForm() {
   };
 
   return (
-    <>
-      <Box
-        border="1px solid"
-        borderColor="#5F6366"
-        borderRadius="0.5em"
-        bgcolor="#90CCF4"
-        p="2em">
-        <div className="flight-detail">
-          <iconify-icon inline icon="carbon:departure" />{" "}
-          {flight.departingAirport}
-          <iconify-icon inline icon="carbon:arrow-right" />{" "}
-          <iconify-icon inline icon="carbon:arrival" /> {flight.arrivingAirport}
-          <div style={{ fontSize: "0.7em" }}>{flight.flight}</div>
-        </div>
-        <div className="flight-time">
-          {flight.departureDateTime}{" "}
-          <iconify-icon inline icon="carbon:arrow-right" />{" "}
-          {flight.arrivalDateTime}
-        </div>
-        <div>
-          <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
-            <IconButton>
-              <iconify-icon inline icon="carbon:attachment" />
+    <Box
+      border="1px solid"
+      borderColor="#5F6366"
+      borderRadius="0.5em"
+      bgcolor="#90CCF4"
+      p="2em">
+      {Object.keys(flight).length !== 0 && (
+        <>
+          <div className="flight-detail">
+            <iconify-icon inline icon="carbon:departure" />{" "}
+            {flight.departingAirport}
+            <iconify-icon inline icon="carbon:arrow-right" />{" "}
+            <iconify-icon inline icon="carbon:arrival" />{" "}
+            {flight.arrivingAirport}
+            <div style={{ fontSize: "0.7em" }}>{flight.flight}</div>
+          </div>
+          <div className="flight-time">
+            {flight.departureDateTime}{" "}
+            <iconify-icon inline icon="carbon:arrow-right" />{" "}
+            {flight.arrivalDateTime}
+          </div>
+          <div>
+            <a target="_blank" href={flight.flightFileURL} rel="noreferrer">
+              <IconButton>
+                <iconify-icon inline icon="carbon:attachment" />
+              </IconButton>
+            </a>
+            <IconButton onClick={deleteFlightData}>
+              <iconify-icon icon="carbon:trash-can" />
             </IconButton>
-          </a>
-          <IconButton onClick={deleteFlightData}>
-            <iconify-icon icon="carbon:trash-can" />
-          </IconButton>
-        </div>
-        <FlightFormDialog />
-      </Box>
-    </>
+          </div>
+        </>
+      )}
+      <FlightFormDialog />
+    </Box>
   );
 }

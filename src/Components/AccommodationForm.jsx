@@ -178,34 +178,37 @@ export default function AccommodationForm() {
   };
 
   return (
-    <>
-      <Box
-        border="1px solid"
-        borderColor="#5F6366"
-        borderRadius="0.5em"
-        bgcolor="#90CCF4"
-        p="2em">
-        <div className="accommodation">
-          {accommodation?.accommodation}
-          <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
-            {accommodation?.address}
+    <Box
+      border="1px solid"
+      borderColor="#5F6366"
+      borderRadius="0.5em"
+      bgcolor="#90CCF4"
+      p="2em">
+      {Object.keys(accommodation).length !== 0 && (
+        <>
+          <div className="accommodation">
+            {accommodation?.accommodation}
+            <div style={{ fontSize: "0.66em", fontWeight: "400" }}>
+              {accommodation?.address}
+            </div>
           </div>
-        </div>
-        <div>
-          <a
-            target="_blank"
-            href={accommodation.accommodationFileURL}
-            rel="noreferrer">
-            <IconButton>
-              <iconify-icon inline icon="carbon:attachment" />
+          <div>
+            <a
+              target="_blank"
+              href={accommodation.accommodationFileURL}
+              rel="noreferrer">
+              <IconButton>
+                <iconify-icon inline icon="carbon:attachment" />
+              </IconButton>
+            </a>
+            <IconButton onClick={deleteAccommodationData}>
+              <iconify-icon icon="carbon:trash-can" />
             </IconButton>
-          </a>
-          <IconButton onClick={deleteAccommodationData}>
-            <iconify-icon icon="carbon:trash-can" />
-          </IconButton>
-        </div>
-        <AccommodationFormDialog />
-      </Box>
-    </>
+          </div>
+        </>
+      )}
+
+      <AccommodationFormDialog />
+    </Box>
   );
 }
