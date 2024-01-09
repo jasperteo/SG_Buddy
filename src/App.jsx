@@ -71,7 +71,7 @@ export default function App() {
         src="https://img.icons8.com/clouds/400/passport.png"
         alt="passport"
       />
-      <div id="title">INSERT NAME OF PROJECT</div>
+      <div id="title">SG Buddy</div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <UidContext.Provider value={uid}>
           <RouterProvider router={router} />
