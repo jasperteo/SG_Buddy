@@ -79,3 +79,12 @@
   font-size: 3em;
   margin: 1em;
 }
+
+.css-1qvr50w-MuiTypography-root {
+  font-family: InterVariable, system-ui, Helvetica, Arial, sans-serif !important;
+}
+
+.css-bhp9pd-MuiPaper-root-MuiCard-root {
+  border-color: #5f6366;
+  border-radius: 0.5em !important;
+}
