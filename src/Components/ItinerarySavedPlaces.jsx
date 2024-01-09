@@ -110,11 +110,11 @@ export default function ItinerarySavedPlaces() {
               <FavoriteIcon />
             </IconButton>
             <DatePicker
-              inputFormat={"dd/MM/yyyy"}
+              format={"DD/MM/YYYY"}
               label={place.val.date ? "Date" : "Choose a date"}
               defaultValue={place.val.date && dayjs(place.val.date)}
               disablePast
-              views={["year", "month", "day"]}
+              views={["day", "month", "year"]}
               onChange={(e) => addDate(e, place)}
             />
           </CardContent>

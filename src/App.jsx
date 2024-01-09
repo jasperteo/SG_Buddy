@@ -1,15 +1,12 @@
 import "./App.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import "dayjs/locale/en-gb";
 import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 import RecommendationForm from "./Components/RecommendationForm";
 import Itinerary from "./Components/Itinerary";
 import LoginForm from "./Components/LogInForm";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./Components/FirebaseConfig";
-
 import BottomNavBar from "./Components/BottomNavBar";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UidContext from "./Components/Context";
@@ -75,7 +72,7 @@ export default function App() {
         alt="passport"
       />
       <div id="title">INSERT NAME OF PROJECT</div>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <UidContext.Provider value={uid}>
           <RouterProvider router={router} />
         </UidContext.Provider>
