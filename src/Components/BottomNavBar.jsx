@@ -11,7 +11,7 @@ export default function BottomNavBar({ isLoggedIn }) {
   const [value, setValue] = useState(2);
   return (
     <div>
-      {isLoggedIn && (
+      {!!isLoggedIn && (
         <Box
           sx={{
             position: "fixed",

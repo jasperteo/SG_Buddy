@@ -3,31 +3,29 @@ import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   onChildAdded,
   onChildChanged,
   onChildRemoved,
   ref,
-  push,
-  set,
   remove,
   update,
   off,
 } from "firebase/database";
 import { database } from "../Components/FirebaseConfig";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import "dayjs/locale/en-gb";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMap from "./GoogleMap";
+import UidContext from "./Context";
 
 //save favourites key
 const DB_FAVOURITES_KEY = "favourites";
 
-export default function ItinerarySavedPlaces({ uid }) {
+export default function ItinerarySavedPlaces() {
   //holds information on saved places
   const [favPlaces, setFavPlaces] = useState([]);
+  const uid = useContext(UidContext);
 
   console.log(uid);
 
@@ -108,8 +106,7 @@ export default function ItinerarySavedPlaces({ uid }) {
             <IconButton
               aria-label="add to favorites"
               sx={{ color: "#FD1D1D" }}
-              onClick={() => deleteSavedFav(favPlaces[index].key)}
-            >
+              onClick={() => deleteSavedFav(favPlaces[index].key)}>
               <FavoriteIcon />
             </IconButton>
             <DatePicker
@@ -135,7 +132,6 @@ export default function ItinerarySavedPlaces({ uid }) {
     <div>
       {favPlaces && <h2>Favourites</h2>}
       {favPlaces && favPlacesListItems(favPlaces)}
-
       {favPlaces && <GoogleMap places={retrieveVal()} />}
     </div>
   );

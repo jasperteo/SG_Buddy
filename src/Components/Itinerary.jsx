@@ -2,15 +2,15 @@ import FlightForm from "./FlightForm";
 import AccommodationForm from "./AccommodationForm";
 import ItinerarySavedPlaces from "./ItinerarySavedPlaces";
 
-export default function Itinerary({ uid }) {
+export default function Itinerary() {
   return (
     <>
       <br />
-      <FlightForm uid={uid} />
+      <FlightForm />
       <br />
-      <AccommodationForm uid={uid} />
+      <AccommodationForm />
       <br />
-      <ItinerarySavedPlaces uid={uid} />
+      <ItinerarySavedPlaces />
     </>
   );
 }
