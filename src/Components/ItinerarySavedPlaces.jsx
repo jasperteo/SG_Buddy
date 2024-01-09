@@ -32,7 +32,7 @@ export default function ItinerarySavedPlaces() {
   //define and create the firebase RealTimeDatabase  reference
   const favouriteListRef = ref(database, `${uid}/${DB_FAVOURITES_KEY}`);
 
-  //save date const
+  //save date added by user for when they want to visit
   const addDate = (date, place) => {
     console.log(date.$d);
     console.log(place.key);
@@ -102,11 +102,13 @@ export default function ItinerarySavedPlaces() {
         <Card key={place.key}>
           <CardHeader title={place.val.name} />
           <CardContent>
-            {place.val.address}
+            <p>{place.val.address}</p>
+            <br />
             <IconButton
               aria-label="add to favorites"
               sx={{ color: "#FD1D1D" }}
-              onClick={() => deleteSavedFav(favPlaces[index].key)}>
+              onClick={() => deleteSavedFav(favPlaces[index].key)}
+            >
               <FavoriteIcon />
             </IconButton>
             <DatePicker
